@@ -1,6 +1,5 @@
 import React, {
   lazy,
-  lazy,
   Suspense,
   useContext,
   useEffect,
@@ -10,7 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import logo from "../assests/logo.png";
 
-import React, { useState } from "react";
+
 
 
 import alltestContext from "../utils/Context";

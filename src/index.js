@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import Header from "./component/Header";
 
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
   Outlet,
@@ -16,7 +17,7 @@ import About from "./component/About";
 import Contact from "./component/Contact";
 import Footer from "./component/Footer";
 
-import { useContext, useState } from "react";
+
 import alltestContext from "./utils/Context.js";
 import CreateTest from "./component/CreateTest";
 import Instruction from "./component/Instruction";
