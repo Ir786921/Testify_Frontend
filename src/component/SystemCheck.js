@@ -1,15 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import DetectRTC from "detectrtc";
-import Swal from "sweetalert2";
+
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import ConnectionSpeed from "../assests/ConnectionSpeed";
-import Webcam from "react-webcam";
+
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
-import SegmentBar from "./SegmentBar";
+
 import UAParser from "ua-parser-js";
-import { ReactInternetSpeedMeter } from "react-internet-meter";
 import { useSelector } from "react-redux";
 import TestNetworkSpeed from "../assests/ConnectionSpeed";
 
@@ -33,7 +30,6 @@ const SystemCheck = () => {
 
   const [volumeLevel, setVolumeLevel] = useState(0);
 
-
   const [speed, setSpeed] = useState();
 
   const steps = ["Browser check", "Webcam check", "Mic check"];
@@ -54,10 +50,10 @@ const SystemCheck = () => {
       const parser = new UAParser();
       const browser = parser.getBrowser();
       const version = parseFloat(browser.version?.split(".")[0] || "0");
-      
-      setBrowserInfo({ 
-        name: browser.name || 'Unknown', 
-        version: version 
+
+      setBrowserInfo({
+        name: browser.name || "Unknown",
+        version: version,
       });
 
       if (
@@ -69,7 +65,7 @@ const SystemCheck = () => {
         setIsBrowserCompatible(false);
         setErrorMsg((prev) => [
           ...prev,
-          "Unsupported browser. Please update or use Chrome/Firefox."
+          "Unsupported browser. Please update or use Chrome/Firefox.",
         ]);
       }
       resolve();
@@ -85,7 +81,7 @@ const SystemCheck = () => {
     } catch (error) {
       setErrorMsg((prev) => [
         ...prev,
-        "Webcam access denied. Please allow webcam permission."
+        "Webcam access denied. Please allow webcam permission.",
       ]);
       setIsWebcamAvailable(false);
     }
@@ -99,7 +95,7 @@ const SystemCheck = () => {
     } catch (error) {
       setErrorMsg((prev) => [
         ...prev,
-        "Microphone access denied. Please allow microphone permission."
+        "Microphone access denied. Please allow microphone permission.",
       ]);
       setIsMicrophoneAvailable(false);
     }
@@ -119,123 +115,115 @@ const SystemCheck = () => {
 
   // const checkMicrophone =  async() => {
   //   try {
-      
+
   //     const stream =  await navigator.mediaDevices.getUserMedia({ audio: true });
-  //     stream.getTracks().forEach(track => track.stop()); 
+  //     stream.getTracks().forEach(track => track.stop());
   //     setIsMicrophoneAvailable(true)
-     
-  
+
   //   } catch (error) {
-     
+
   //     setIsMicrophoneAvailable(false)
   //     setErrorMsg((prev)=>[...prev,"Microphone access denied. Please allow Microphone permission."]);
-      
+
   //   }
   // };
 
-  
+  console.log(Number(Math.round(Network)));
 
- console.log(Number(Math.round(Network)));
- 
+  const checkNetwork = () => {
+    return new Promise((resolve) => {
+      try {
+        // Convert Network from string format like "74.80" to float
+        const speed =
+          typeof Network === "string" ? parseFloat(Network) : Network;
+        console.log("Current network speed:", speed);
 
-
- const checkNetwork = () => {
-  return new Promise((resolve) => {
-    try {
-      // Convert Network from string format like "74.80" to float
-      const speed = typeof Network === 'string' ? parseFloat(Network) : Network;
-      console.log('Current network speed:', speed);
-
-      // Set isNetworkOnline to true only if the speed is greater than 2.0 and the network is online
-      if (!isNaN(speed) && speed > 2.0 && navigator.onLine) {
-        setIsNetworkOnline(true);
-        setErrorMsg(prev => prev.filter(msg => !msg.includes("Internet is too slow")));
-      } else {
+        // Set isNetworkOnline to true only if the speed is greater than 2.0 and the network is online
+        if (!isNaN(speed) && speed > 2.0 && navigator.onLine) {
+          setIsNetworkOnline(true);
+          setErrorMsg((prev) =>
+            prev.filter((msg) => !msg.includes("Internet is too slow"))
+          );
+        } else {
+          setIsNetworkOnline(false);
+          setErrorMsg((prev) => {
+            if (!prev.includes("Internet is too slow")) {
+              return [...prev, "Internet is too slow"];
+            }
+            return prev;
+          });
+        }
+      } catch (error) {
+        console.error("Error checking network:", error);
         setIsNetworkOnline(false);
-        setErrorMsg(prev => {
-          if (!prev.includes("Internet is too slow")) {
-            return [...prev, "Internet is too slow"];
-          }
-          return prev;
-        });
       }
-    } catch (error) {
-      console.error('Error checking network:', error);
-      setIsNetworkOnline(false);
-    }
-    resolve();
-  });
-};
+      resolve();
+    });
+  };
 
+  const finalCheck = () => {
+    return new Promise((resolve) => {
+      const allChecks = {
+        browser: isBrowserCompatible,
+        webcam: isWebcamAvailable,
+        microphone: isMicrophoneAvailable,
+        network: isNetworkOnline,
+        networkSpeed: Network,
+      };
+      console.log("All checks completed", allChecks);
 
+      // You can dispatch the results to Redux store if needed
+      // dispatch(setCheckResults(allChecks));
 
-const finalCheck = () => {
-  return new Promise((resolve) => {
-    const allChecks = {
-      browser: isBrowserCompatible,
-      webcam: isWebcamAvailable,
-      microphone: isMicrophoneAvailable,
-      network: isNetworkOnline,
-      networkSpeed: Network
-    };
-    console.log("All checks completed", allChecks);
-    
-    // You can dispatch the results to Redux store if needed
-    // dispatch(setCheckResults(allChecks));
-    
-    resolve();
-  });
-};
-
-useEffect(() => {
-  if (Network !== undefined) {
-    checkNetwork();
-  }
-}, [Network]);
-
+      resolve();
+    });
+  };
 
   useEffect(() => {
-  
-//  const checks = [checkBrowserCompatibility, checkWebcam, checkMicrophone, checkNetwork, finalCheck];
+    if (Network !== undefined) {
+      checkNetwork();
+    }
+  }, [Network]);
 
- let mounted = true;
+  useEffect(() => {
+    //  const checks = [checkBrowserCompatibility, checkWebcam, checkMicrophone, checkNetwork, finalCheck];
 
- const checks = [
-   checkBrowserCompatibility,
-   checkWebcam,
-   checkMicrophone,
-   
-   finalCheck
- ];
+    let mounted = true;
 
- const runChecks = async () => {
-   for (let i = 0; i < checks.length; i++) {
-     if (!mounted) return;
-     
-     setStep(i);
-     const time = i === 2 ? 6000 : 3000;
+    const checks = [
+      checkBrowserCompatibility,
+      checkWebcam,
+      checkMicrophone,
 
-     try {
-       await checks[i]();
-       await new Promise((resolve) => setTimeout(resolve, time));
-     } catch (error) {
-       console.error(`Error in check ${i}:`, error);
-       setErrorMsg((prev) => [...prev, `Check ${i} failed: ${error.message}`]);
-     }
-   }
- };
+      finalCheck,
+    ];
 
- runChecks();
+    const runChecks = async () => {
+      for (let i = 0; i < checks.length; i++) {
+        if (!mounted) return;
 
- return () => {
-   mounted = false;
- };
-    
-    
+        setStep(i);
+        const time = i === 2 ? 6000 : 3000;
+
+        try {
+          await checks[i]();
+          await new Promise((resolve) => setTimeout(resolve, time));
+        } catch (error) {
+          console.error(`Error in check ${i}:`, error);
+          setErrorMsg((prev) => [
+            ...prev,
+            `Check ${i} failed: ${error.message}`,
+          ]);
+        }
+      }
+    };
+
+    runChecks();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
-
-  
-
 
   return (
     <div className="container-fluid tw-bg-gradient-to-br tw-from-blue-100 tw-to-purple-200">
@@ -450,21 +438,24 @@ useEffect(() => {
                 </p>
               </div>
             </div>
-            
-            <div
-  className={`tw-mt-4 tw-px-6 tw-py-2 tw-border-2 ${isListening ? 'tw-border-gray-400' : 'tw-border-success'} 
-  tw-rounded-full tw-text-center tw-cursor-pointer 
-  ${isListening ? 'tw-bg-gray-300 tw-text-gray-500' : 'tw-bg-green-500 tw-text-white'} 
-  hover:${isListening ? 'tw-bg-gray-300' : 'tw-bg-green-600'} 
-  tw-font-semibold tw-text-sm tw-transition-all tw-duration-200 tw-transform hover:tw-scale-105 focus:outline-none`}
-  disabled={isListening}
-  onClick={handleStartListening}
->
-  Test Mic
-</div>
-         
 
-            
+            <div
+              className={`tw-mt-4 tw-px-6 tw-py-2 tw-border-2 ${
+                isListening ? "tw-border-gray-400" : "tw-border-success"
+              } 
+  tw-rounded-full tw-text-center tw-cursor-pointer 
+  ${
+    isListening
+      ? "tw-bg-gray-300 tw-text-gray-500"
+      : "tw-bg-green-500 tw-text-white"
+  } 
+  hover:${isListening ? "tw-bg-gray-300" : "tw-bg-green-600"} 
+  tw-font-semibold tw-text-sm tw-transition-all tw-duration-200 tw-transform hover:tw-scale-105 focus:outline-none`}
+              disabled={isListening}
+              onClick={handleStartListening}
+            >
+              Test Mic
+            </div>
           </div>
           {/* Network */}
           <div
@@ -520,8 +511,7 @@ useEffect(() => {
                 <p className="tw-text-gray-700 tw-font-semibold">Network</p>
                 <p className="tw-text-gray-500 tw-text-sm">
                   <span>
-                  Speed : <TestNetworkSpeed/>
-                  
+                    Speed : <TestNetworkSpeed />
                   </span>
                 </p>
               </div>
@@ -544,35 +534,40 @@ useEffect(() => {
         </div>
 
         <div className=" tw-flex tw-justify-center tw-mt-7 tw-flex-col tw-gap-4">
+          {errorMsg.length === 0 ? (
+            <p className="tw-text-green-600 tw-m-auto tw-w-2/5 tw-bg-green-100 tw-border tw-border-green-400 tw-px-4 tw-py-2 tw-rounded-md tw-shadow-md">
+              It is Mandatory to check Mic first , ✅ All systems are
+              functioning properly.
+            </p>
+          ) : (
+            errorMsg.map((msg) => {
+              return (
+                <p className="tw-w-2/5 tw-m-auto tw-flex tw-items-center tw-gap-2 tw-bg-red-100 tw-text-red-700 tw-border tw-border-red-400 tw-px-4 tw-py-2 tw-rounded-md tw-shadow-md tw-animate-pulse">
+                  <svg
+                    className="tw-w-5 tw-h-5 tw-text-red-600"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 9v2m0 4h.01M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"
+                    ></path>
+                  </svg>
+                  {msg}
+                </p>
+              );
+            })
+          )}
 
-        {errorMsg.length === 0 ? ( <p className="tw-text-green-600 tw-m-auto tw-w-2/5 tw-bg-green-100 tw-border tw-border-green-400 tw-px-4 tw-py-2 tw-rounded-md tw-shadow-md">
-    It is Mandatory to check Mic first , ✅ All systems are functioning properly.
-  </p>):(
-       errorMsg.map((msg)=>{
-        return (<p className="tw-w-2/5 tw-m-auto tw-flex tw-items-center tw-gap-2 tw-bg-red-100 tw-text-red-700 tw-border tw-border-red-400 tw-px-4 tw-py-2 tw-rounded-md tw-shadow-md tw-animate-pulse">
-      <svg
-        className="tw-w-5 tw-h-5 tw-text-red-600"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M12 9v2m0 4h.01M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"
-        ></path>
-      </svg>
-      {msg}
-    </p>)
-       })   
-    )}
-        
           {isMicrophoneAvailable &&
           isWebcamAvailable &&
           isNetworkOnline &&
           isBrowserCompatible &&
-          step >= 3 && transcript.length != 0? (
+          step >= 3 &&
+          transcript.length != 0 ? (
             <button
               onClick={clickhandle}
               className={`tw-bg-green-500 tw-px-8 tw-rounded-md tw-shadow-lg  tw-py-1 tw-border-0 tw-w-44 tw-m-auto`}

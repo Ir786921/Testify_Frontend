@@ -8,11 +8,9 @@ import React, {
 } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import Editor from "@monaco-editor/react";
-import Swal from "sweetalert2";
-import * as monaco from "monaco-editor";
+
 import axios from "axios";
-import Dropdown from "./UI/dropdown";
+
 import { handleReset } from "../TestEnvHelperFunctions/helperfunctions";
 import {
   renderProgrammingContent,
@@ -21,7 +19,7 @@ import {
 import { transformSections } from "../TestEnvHelperFunctions/TransformedObject";
 import CountdownTimer from "./Timer";
 import { handleSubmitAnswer } from "../TestEnvHelperFunctions/SubmitAnswer.js";
-import trackUserResponse from "../TestEnvHelperFunctions/TrackResponse.js";
+
 import { setTestId } from "../Redux/librarySlice.js";
 import Detection from "./Detection.js";
 
