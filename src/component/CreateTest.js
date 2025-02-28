@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import SuccessModal from "./UI/SuccessModal";
 import { useDispatch } from "react-redux";
 import { addTest } from "../Redux/CreatedTestSlice";
-import { parseInput } from "../TestEnvHelperFunctions/ParseInput.js";
 
 const TestCreator = () => {
 

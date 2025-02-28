@@ -9,7 +9,7 @@ const SegmentBar = ({ progress }) => {
         {[...Array(totalSegments)].map((_, index) => (
           <div
             key={index}
-            className={`tw-w-3 tw-h-8 tw-rounded-md tw-transition-colors ${
+            className={`tw-w-3 tw-h-8 tws-rounded-md tw-transition-colors ${
               index < filledSegments ? 'tw-bg-pink-500' : 'tw-bg-gray-300'
             }`}
           ></div>

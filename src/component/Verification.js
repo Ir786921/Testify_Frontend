@@ -1,6 +1,5 @@
 import { React, useRef, useState, useCallback, useEffect } from "react";
 import Webcam from "react-webcam";
-import image1 from "../assests/Illustrator.png";
 import { Link, useParams } from "react-router-dom";
 import Good from "../assests/good.png";
 import Bad from "../assests/Bad.png";
@@ -8,16 +7,14 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { updateUser } from "../Redux/UserSlice";
 import { io } from "socket.io-client";
-// import Registration from "./Registration.js";
-// import CaptureImage from "./CaptureImage.js";
-// import CaptureID from "./CaptureID.js";
+
 import RegImg from "../assests/R.png";
 import GoodID from "../assests/GoodID.png";
 import Bad1 from "../assests/Bad1.png";
 import Bad2 from "../assests/Bad2.png";
 import * as tf from "@tensorflow/tfjs";
 import * as blazeface from "@tensorflow-models/blazeface";
-import * as mobilenet from "@tensorflow-models/mobilenet";
+
 import StatusMessage from "../utils/StatusMessage";
 import {
   uploadID,

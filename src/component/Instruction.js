@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import alltestContext from "../utils/Context";
+
 import { Link, useNavigate, useParams } from "react-router-dom";
-import TestCard from "./TestCard";
+
 import { useSelector } from "react-redux";
-import { ToastContainer, toast,Slide } from 'react-toastify';
+import { ToastContainer, toast,Slide } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const Instruction = () => {
   const { id } = useParams();
@@ -206,13 +207,7 @@ const Instruction = () => {
         </div>
         </div>
      
-      {/* 
-      <div className="row">
-        {suggestion.slice(1,6).map((ele)=>{
-           <h1>sdmcklsdlk</h1>
-     
-        })}
-      </div> */}
+
 
 {showModal && (
         <div className="tw-fixed tw-inset-0 tw-bg-black tw-bg-opacity-50 tw-flex tw-items-center tw-justify-center">

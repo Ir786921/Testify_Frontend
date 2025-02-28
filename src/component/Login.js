@@ -170,27 +170,7 @@ const Signup = () => {
             className="tw-w-full tw-max-w-sm"
             onSubmit={isclick ? LoginUser : RegisterUser}
           >
-            {/* {!isclick && (
-              <div className="tw-mb-4">
-                <label
-                  htmlFor="username"
-                  className="tw-block tw-text-sm tw-font-medium tw-mb-2"
-                >
-                  Username
-                </label>
-                <input
-                  type="text"
-                  value={User}
-                  onChange={(e) => {
-                    setUser(e.target.value);
-                  }}
-                  id="username"
-                  placeholder="Enter your username"
-                  className="tw-w-full tw-px-4 tw-py-2 tw-bg-gray-800 tw-text-gray-300 tw-rounded tw-outline-none tw-border tw-border-gray-700 focus:tw-border-purple-500 tw-shadow-sm"
-                />
-              </div>
-              
-            )} */}
+          
 
             {!isclick && (
               <>
