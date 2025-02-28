@@ -1,7 +1,7 @@
 import React, { lazy, Suspense, useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import Header from "./component/Header";
-
+import "regenerator-runtime/runtime";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
