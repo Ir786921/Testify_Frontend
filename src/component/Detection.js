@@ -13,6 +13,11 @@ const Detection = ({ cloudinaryImageUrl }) => {
   useEffect(() => {
     const fetchImageEmbedding = async () => {
       try {
+        const img = new Image();
+        img.crossOrigin = "Anonymous";
+        img.src = cloudinaryImageUrl;
+        await new Promise((resolve) => (img.onload = resolve));
+
         const faceModel = await faceLandmarksDetection.createDetector(
           faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh,
           {
@@ -21,20 +26,15 @@ const Detection = ({ cloudinaryImageUrl }) => {
           }
         );
 
-        const img = new Image();
-        img.crossOrigin = "Anonymous";
-        img.src = cloudinaryImageUrl;
-        await new Promise((resolve) => (img.onload = resolve));
-
-        const face = await faceModel.estimateFaces(img);
-        if (face.length === 1) {
-          userEmbeddingRef.current = generateFaceEmbedding(face[0]);
-          console.log("Stored Embedding:", userEmbeddingRef.current);
+        const faces = await faceModel.estimateFaces(img);
+        if (faces.length === 1) {
+          userEmbeddingRef.current = generateRobustFaceEmbedding(faces[0]);
+          console.log("Stored Reference Embedding:", userEmbeddingRef.current);
         } else {
           console.error("No face detected in uploaded image.");
         }
       } catch (error) {
-        console.error("Error fetching image embedding:", error);
+        console.error("Error fetching image:", error);
       }
     };
 
@@ -56,8 +56,14 @@ const Detection = ({ cloudinaryImageUrl }) => {
         {
           runtime: "mediapipe",
           solutionPath: "https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh",
+          modelType: "full",
         }
       );
+
+      // Track face match consistency over time
+      const matchHistory = [];
+      const historyLength = 5;
+      const matchThreshold = 0.6; // 60% matches required to confirm identity
 
       const detect = async () => {
         if (!video || video.readyState !== 4) return;
@@ -73,20 +79,37 @@ const Detection = ({ cloudinaryImageUrl }) => {
         const foundItems = objects.filter((obj) => flaggedItems.includes(obj.class));
 
         if (!faceVisible) warnUser("Face not visible!");
-        if (foundItems.length > 0) warnUser(`Unallowed objects detected: ${detectedObjects}`);
+        if (foundItems.length > 0) warnUser(` objects detected: ${detectedObjects}`);
+        if (faces.length > 1) warnUser("Multiple faces detected!");
 
+        // Face verification
         if (faces.length === 1 && userEmbeddingRef.current) {
-          const newEmbedding = generateFaceEmbedding(faces[0]);
-          console.log(newEmbedding);
+          const newEmbedding = generateRobustFaceEmbedding(faces[0]);
+          const matchScore = faceMatchScore(newEmbedding, userEmbeddingRef.current);
           
-          const match = compareEmbeddings(newEmbedding, userEmbeddingRef.current);
-          console.log("Face Match:", match ? "✅ Matched" : "❌ Not Matched");
+          // Track match history for more stable results
+          matchHistory.push(matchScore > 0.75);
+          if (matchHistory.length > historyLength) {
+            matchHistory.shift(); // Remove oldest result
+          }
+          
+          // Calculate percentage of matches
+          const matchPercentage = matchHistory.filter(Boolean).length / matchHistory.length;
+          const isMatched = matchPercentage >= matchThreshold;
+          
+          console.log("Face Match Score:", matchScore.toFixed(2));
+          console.log("Match History:", matchHistory);
+          console.log("Face Match:", isMatched ? "✅ Matched" : "❌ Not Matched");
 
-          if (!match) warnUser("Face mismatch! Possible impersonation.");
+          if (!isMatched && matchHistory.length >= 3) {
+            warnUser("Face mismatch! Possible impersonation.");
+          }
         }
 
+        // Memory cleanup
         tf.dispose();
-        setTimeout(detect, 500);// Debounce for performance
+
+        setTimeout(detect, 500); // Debounce to avoid excessive processing
       };
 
       detect();
@@ -102,31 +125,85 @@ const Detection = ({ cloudinaryImageUrl }) => {
       });
     };
 
-    const generateFaceEmbedding = (face) => {
-      return normalizeVector(face.keypoints.map((kp) => [kp.x, kp.y, kp.z || 0]).flat());
+    // More robust face embedding that accounts for facial features and relationships
+    const generateRobustFaceEmbedding = (face) => {
+      // Extract key facial landmarks
+      const keypoints = face.keypoints;
+      
+      // Get key facial features
+      const rightEye = getAverageLandmark(keypoints, [33, 133, 160, 159, 158, 157, 173]);
+      const leftEye = getAverageLandmark(keypoints, [362, 398, 384, 385, 386, 387, 388]);
+      const nose = getAverageLandmark(keypoints, [1, 2, 3, 4, 5, 6]);
+      const mouth = getAverageLandmark(keypoints, [61, 185, 40, 39, 37, 0, 267, 269, 270, 409]);
+      const jawline = getAverageLandmark(keypoints, [127, 162, 21, 54, 103, 67, 109, 10, 338, 297, 332, 284, 251, 389]);
+      
+      // Create ratios and relationships between facial features (more robust to lighting/angle)
+      const faceWidth = calculateDistance(keypoints[234], keypoints[454]);
+      const faceHeight = calculateDistance(keypoints[10], keypoints[152]);
+      
+      // Calculate eye distance ratio
+      const eyeDistance = calculateDistance(rightEye, leftEye) / faceWidth;
+      
+      // Calculate eye to nose ratios
+      const rightEyeToNose = calculateDistance(rightEye, nose) / faceHeight;
+      const leftEyeToNose = calculateDistance(leftEye, nose) / faceHeight;
+      
+      // Calculate nose to mouth ratio
+      const noseToMouth = calculateDistance(nose, mouth) / faceHeight;
+      
+      // Generate final embedding with facial proportions (more stable across angles)
+      return [
+        eyeDistance,
+        rightEyeToNose,
+        leftEyeToNose,
+        noseToMouth,
+        faceWidth / faceHeight, // face aspect ratio
+      ];
     };
-    
-    const normalizeVector = (vector) => {
-      const magnitude = Math.sqrt(vector.reduce((acc, val) => acc + val * val, 0));
-      return vector.map((val) => val / magnitude);
+
+    // Helper to find average position of a group of landmarks
+    const getAverageLandmark = (keypoints, indices) => {
+      const filteredPoints = indices
+        .map(idx => keypoints.find(kp => kp.name === `${idx}`))
+        .filter(Boolean);
+      
+      if (filteredPoints.length === 0) {
+        // Fall back to any points if named points aren't found
+        const points = indices.map(i => keypoints[i]).filter(Boolean);
+        if (points.length === 0) return { x: 0, y: 0 };
+        
+        const sumX = points.reduce((sum, p) => sum + p.x, 0);
+        const sumY = points.reduce((sum, p) => sum + p.y, 0);
+        return { x: sumX / points.length, y: sumY / points.length };
+      }
+      
+      const sumX = filteredPoints.reduce((sum, p) => sum + p.x, 0);
+      const sumY = filteredPoints.reduce((sum, p) => sum + p.y, 0);
+      return { x: sumX / filteredPoints.length, y: sumY / filteredPoints.length };
     };
-    
-    const compareEmbeddings = (embedding1, embedding2, cosThreshold = 0.6, distThreshold = 15) => {
-      // Cosine similarity
-      const dotProduct = embedding1.reduce((sum, val, i) => sum + val * embedding2[i], 0);
-      const cosineMatch = dotProduct > cosThreshold;
-    
-      // Euclidean distance (lower = more similar)
-      const distance = Math.sqrt(
-        embedding1.reduce((acc, val, i) => acc + Math.pow(val - embedding2[i], 2), 0)
+
+    // Calculate Euclidean distance between two points
+    const calculateDistance = (point1, point2) => {
+      return Math.sqrt(
+        Math.pow(point1.x - point2.x, 2) + Math.pow(point1.y - point2.y, 2)
       );
-      const distanceMatch = distance < distThreshold;
-    
-      console.log(`Cosine Similarity: ${dotProduct}, Distance: ${distance}`);
-    
-      return cosineMatch && distanceMatch;
     };
-    
+
+    // Calculate similarity score between embeddings (0 to 1, where 1 is identical)
+    const faceMatchScore = (embedding1, embedding2) => {
+      if (embedding1.length !== embedding2.length) return 0;
+      
+      // Calculate Euclidean distance
+      let sumSquaredDifferences = 0;
+      for (let i = 0; i < embedding1.length; i++) {
+        sumSquaredDifferences += Math.pow(embedding1[i] - embedding2[i], 2);
+      }
+      
+      const distance = Math.sqrt(sumSquaredDifferences);
+      // Convert distance to similarity score (inverted and normalized)
+      return Math.max(0, 1 - (distance / Math.sqrt(embedding1.length)));
+    };
+
     fetchImageEmbedding();
     setupCamera().then(detectUnfairPractices);
 

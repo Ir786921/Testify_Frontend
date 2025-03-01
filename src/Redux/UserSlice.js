@@ -16,6 +16,7 @@ const UserSlice = createSlice(
             },
             removeUser: (state) => {
                 state.item = [];
+                state.IsLogin = false;
             },
           updateUser: (state, action) => {
             

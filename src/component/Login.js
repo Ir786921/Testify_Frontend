@@ -160,7 +160,7 @@ const Signup = () => {
       {/* Left Section */}
       <div className="md:tw-w-1/2 tw-w-full tw-bg-black tw-text-white tw-flex tw-justify-center tw-items-center">
         <div className=" tw-flex tw-flex-col tw-justify-center tw-items-center tw-p-8 tw-shadow-sm tw-rounded-md tw-shadow-purple-500  tw-w-3/4">
-          <h2 className="tw-text-4xl tw-font-bold tw-mb-5">
+          <h2 className="tw-text-start tw-text-4xl tw-font-bold tw-mb-5 ">
             {isclick ? "Login" : "SignUp"}
           </h2>
           {isclick && (
@@ -321,15 +321,17 @@ const Signup = () => {
             </span>
           )}
 
-          <p className="tw-text-sm tw-text-gray-400">
-            {" "}
-            {isclick ? "Don't have an account" : "Already Registered"} ? &nbsp;
+          <p className="tw-text-sm tw-text-gray-400 tw-flex tw-justify-center tw-gap-10 tw-w-full">
+          
+          <span className=" tw-items-center tw-flex tw-justify-between">{isclick ? "Don't have an account" : "Already Registered"}  &nbsp; ? </span>
+
+            
             <span
-              className=" tw-text-purple-500 tw-cursor-pointer tw-font-semibold"
+              className=" tw-text-black tw-cursor-pointer tw-font-semibold tw-px-6 tw-py-1 tw-bg-purple-300 tw-rounded-sm tw-shadow-md"
               onClick={clickHandle}
             >
-              {" "}
-              {isclick ? "Sign up now" : "Login"}{" "}
+              
+              {isclick ? "Sign up " : "Login"}
             </span>
           </p>
         </div>

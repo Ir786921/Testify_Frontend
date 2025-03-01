@@ -1,16 +1,7 @@
-import React, {
-  lazy,
-  Suspense,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { lazy, Suspense, useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import logo from "../assests/logo.png";
-
-
-
 
 import alltestContext from "../utils/Context";
 import { useDispatch, useSelector } from "react-redux";
@@ -52,9 +43,9 @@ const Navbar = () => {
   };
 
   const userdetails = useSelector((store) => store.User.item);
+  const isLogin = useSelector((store) => store.User.IsLogin);
 
   const dispatch = useDispatch();
-  console.log(userdetails?.FullName);
 
   const user = {
     name: "John Doe",
@@ -169,12 +160,32 @@ const Navbar = () => {
             >
               About
             </button>
-            <Link
-              to="/test"
+            <button
+              onClick={() => {
+                isLogin
+                  ? navigate("/test")
+                  : Swal.fire({
+                      title: "🔒 Access Restricted!",
+                      html: `<p class="tw-text-lg tw-font-semibold tw-text-white">You need to logIn to explore the library.</p>`,
+                      icon: "warning",
+                      timer: 5000,
+                      timerProgressBar: true,
+                      showConfirmButton: false,
+                      backdrop: `rgba(0,0,0,0.6)`,
+                      toast: false,
+                      position: "center",
+                      customClass: {
+                        popup:
+                          "tw-rounded-2xl tw-bg-gradient-to-br tw-from-emerald-500 tw-to-green-700 tw-shadow-xl",
+                        title: "tw-text-xl tw-font-bold tw-text-white",
+                        htmlContainer: "tw-text-center",
+                      },
+                    });
+              }}
               className="nav-link text-black hover:tw-bg-green-500 p-2 tw-rounded-md"
             >
               Test Library
-            </Link>
+            </button>
             <Link
               to="/Contact"
               className="nav-link text-black hover:tw-bg-green-500 p-2 tw-rounded-md"
@@ -185,14 +196,6 @@ const Navbar = () => {
 
           {/* User Section & Auth Buttons */}
           <div className="tw-hidden md:tw-flex tw-items-center tw-space-x-4">
-            {/* Authenticated User View */}
-            {/* <div className="tw-relative">
-              <button className="tw-p-2 tw-rounded-full hover:tw-bg-gray-100 tw-relative">
-                <i className="fas fa-bell tw-text-gray-600"></i>
-                <span className="tw-absolute tw-top-1 tw-right-1 tw-h-2 tw-w-2 tw-bg-red-500 tw-rounded-full"></span>
-              </button>
-            </div> */}
-
             {userdetails?.Email && (
               <div className="tw-relative tw-left-28 tw-bg-white dropdown-container">
                 <button
@@ -244,31 +247,86 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:tw-hidden tw-absolute tw-w-full tw-bg-white tw-border-b tw-border-gray-100 tw-shadow-lg">
           <div className="tw-px-4 tw-pt-2 tw-pb-3 tw-space-y-1">
-            <div className="tw-py-3 tw-border-b tw-border-gray-100">
-              <div className="tw-flex tw-items-center tw-space-x-3 tw-px-3">
-                <div className="tw-h-10 tw-w-10 tw-rounded-full tw-bg-gradient-to-r tw-from-blue-500 tw-to-purple-500 tw-flex tw-items-center tw-justify-center">
-                  <i className="fas fa-user tw-text-white"></i>
-                </div>
-                <div>
-                  <div className="tw-text-sm tw-font-semibold tw-text-gray-900">
-                    {user.name}
+            <div className="tw-border-b tw-border-gray-100">
+              <div className="tw-flex tw-flex-col tw-gap-4 tw-p-2">
+                {isLogin && (
+                  <div className="tw-flex tw-items-center tw-space-x-3 tw-px-3">
+                    <div className="tw-h-10 tw-w-10 tw-rounded-full tw-bg-gradient-to-r tw-from-blue-500 tw-to-purple-500 tw-flex tw-items-center tw-justify-center">
+                      <i className="fas fa-user tw-text-white"></i>
+                    </div>
+                    <div>
+                      <div className="tw-text-sm tw-font-semibold tw-text-gray-900">
+                        {userdetails?.FullName}
+                      </div>
+                      <div className="tw-text-xs tw-text-gray-500">
+                        {userdetails?.Email}
+                      </div>
+                    </div>
                   </div>
-                  <div className="tw-text-xs tw-text-gray-500">
-                    {user.email}
-                  </div>
+                )}
+
+                <div className="tw-flex tw-flex-col tw-items-center tw-gap-3">
+                  <Link
+                    to="/"
+                    className="nav-link text-black hover:tw-bg-green-500 p-2 tw-rounded-md tw-w-full"
+                  >
+                    Home
+                  </Link>
+
+                  <button
+                    className="tw-text-start nav-link text-black hover:tw-bg-green-500 p-2 tw-rounded-md tw-w-full"
+                    onClick={() => scrollToSection("about")}
+                  >
+                    About
+                  </button>
+                  <button
+                    onClick={() => {
+                      isLogin
+                        ? navigate("/test")
+                        : Swal.fire({
+                            title: "🔒 Access Restricted!",
+                            html: `<p class="tw-text-lg tw-font-semibold tw-text-white">You need to logIn to explore the library.</p>`,
+
+                            icon: "warning",
+                            timer: 5000,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
+                            backdrop: `rgba(0,0,0,0.6)`,
+                            toast: false,
+                            position: "center",
+                            customClass: {
+                              popup:
+                                "tw-rounded-2xl tw-bg-gradient-to-br tw-from-emerald-500 tw-to-green-700 tw-shadow-xl",
+                              title: "tw-text-xl tw-font-bold tw-text-white",
+                              htmlContainer: "tw-text-center",
+                            },
+                          });
+                    }}
+                    className="tw-text-start nav-link text-black hover:tw-bg-green-500 p-2 tw-rounded-md tw-w-full"
+                  >
+                    Test Library
+                  </button>
+                  <Link
+                    to="/Contact"
+                    className="nav-link text-black hover:tw-bg-green-500 p-2 tw-rounded-md tw-w-full"
+                  >
+                    Contact
+                  </Link>
                 </div>
               </div>
             </div>
 
-            <div className="tw-pt-4 tw-pb-2 tw-space-y-2">
-              <a
-                href="#"
-                className="tw-flex tw-items-center tw-space-x-3 tw-px-3 tw-py-2 tw-text-sm tw-text-red-600 hover:tw-bg-red-50 tw-rounded-md"
-              >
-                <i className="fas fa-sign-out-alt tw-text-red-500"></i>
-                <span>Sign Out</span>
-              </a>
-            </div>
+            {isLogin && (
+              <div className="tw-pt-2 tw-pb-2 tw-space-y-2">
+                <a
+                  href="#"
+                  className="tw-flex tw-items-center tw-space-x-3 tw-px-3 tw-py-2 tw-text-sm tw-text-red-600 hover:tw-bg-red-50 tw-rounded-md"
+                >
+                  <i className="fas fa-sign-out-alt tw-text-red-500"></i>
+                  <span>Sign Out</span>
+                </a>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -277,100 +335,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-// const Header = () => {
-// const username = useSelector(Store => Store.User);
-// const navigate = useNavigate();
-
-// const [showComponent, setShowComponent] = useState(false);
-// console.log(username);
-// const handleClick = () => {
-//   if (username?.uid) {
-//     navigate("/test")
-// }
-// else{
-//   swal("Please Login to Access Library");
-// }
-//   setShowComponent(true);
-// };
-// function HandleSignOut(){
-
-// signOut(auth).then(() => {
-//   navigate("/Signup")
-// }).catch((error) => {
-//   navigate("/error")
-// });
-// }
-
-//   return (
-//     <nav class="navbar navbar-expand-lg navbar-light tw-bg-white tw-shadow-md tw-p-3 fixed-top tw-shadow-black/5">
-//       <a className="navbar-brand" href="#Home">
-//         <img src={logo} alt="" className="tw-h-16 tw-w-16" />
-//         &nbsp;<h3 className=" tw-inline-block">Testify</h3>
-//       </a>
-
-//       <button
-//         className="navbar-toggler tw-bg-blue-600"
-//         type="button"
-//         data-bs-toggle="collapse"
-//         data-bs-target="#navbarSupportedContent"
-//         aria-controls="navbarSupportedContent"
-//         aria-expanded="false"
-//         aria-label="Toggle navigation"
-//       >
-//         <span className="navbar-toggler-icon tw-text-white"></span>
-//       </button>
-//       <div className="collapse navbar-collapse" id="navbarSupportedContent">
-//         <ul className="navbar-nav m-auto tw-p-2">
-//           <li class="nav-item active link tw-rounded-lg tw-text-xl p-2 hover:tw-bg-green-400">
-//             <Link to="/" className="nav-link text-black">
-//               Home
-//             </Link>
-//           </li>
-//           <li className="nav-item active p-2 link tw-rounded-lg text-white hover:tw-bg-green-400 tw-text-xl">
-//             <Link to="/About" className="nav-link text-black" href="#About">
-//               About
-//             </Link>
-//           </li>
-//           <li  className="nav-item  p-2 link tw-rounded-lg hover:tw-text-white hover:tw-bg-green-400 tw-text-xl">
-//             <button  onClick={handleClick} className="nav-link text-black">
-//             Test Library
-//             </button>
-//           </li>
-//           <li className="nav-item active p-2 link tw-rounded-lg hover:tw-bg-green-400 tw-text-xl">
-//             <Link
-//               to="/Contact"
-//               className="nav-link text-black"
-//             >
-//               Contact
-//             </Link>
-//           </li>
-
-//         </ul>
-
-//         <div className="tw-flex tw-items-center tw-space-x-4 tw-p-2">
-//           <span className="tw-text-lg tw-font-medium tw-text-emerald-500">
-//             {username?.uid ? username?.displayName : "Guest"}
-//           </span>
-//           {username?.uid ? (
-//             <button
-//               onClick={HandleSignOut}
-//               className="tw-bg-red-500 tw-text-white tw-px-4 tw-py-2 tw-rounded-lg tw-transition hover:tw-bg-red-600"
-//             >
-//               Sign Out
-//             </button>
-//           ) : (
-//             <Link
-//               to="/Signup"
-//               className="tw-bg-green-500 tw-text-white tw-px-4 tw-py-2 tw-rounded-lg tw-transition hover:tw-bg-green-600 tw-no-underline"
-//             >
-//               Sign Up
-//             </Link>
-//           )}
-//         </div>
-
-//       </div>
-//     </nav>
-//   );
-// };
-// export default Header;
