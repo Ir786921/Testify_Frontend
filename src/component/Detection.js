@@ -9,6 +9,8 @@ const Detection = ({ cloudinaryImageUrl }) => {
   const userEmbeddingRef = useRef(null);
   const warningsRef = useRef(0);
   const detectionRunningRef = useRef(false);
+  const streamRef = useRef(null);
+  const timeoutRef = useRef(null);
 
   useEffect(() => {
     const fetchImageEmbedding = async () => {
@@ -43,6 +45,7 @@ const Detection = ({ cloudinaryImageUrl }) => {
         video: { width: 640, height: 480 },
       });
       videoRef.current.srcObject = stream;
+      streamRef.current = stream;
     };
 
     const detectUnfairPractices = async () => {
@@ -109,7 +112,7 @@ const Detection = ({ cloudinaryImageUrl }) => {
         // Memory cleanup
         tf.dispose();
 
-        setTimeout(detect, 500); // Debounce to avoid excessive processing
+        timeoutRef.current = setTimeout(detect, 500); // Debounce to avoid excessive processing
       };
 
       detect();
@@ -209,6 +212,13 @@ const Detection = ({ cloudinaryImageUrl }) => {
 
     return () => {
       detectionRunningRef.current = false;
+
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+        streamRef.current = null;
+      }
     };
   }, []);
 

@@ -209,10 +209,8 @@ const TestEnv = () => {
   };
 
   useEffect(() => {
-    if (Object.keys(userResponses).length !== 0 && !userResponses.hasOwnProperty(currentQuestion)) {
-      setUnAttempted((prev) => prev + 1);
-    }
-  }, [userResponses, currentQuestion]);
+    setUnAttempted(totalQuestions - Object.keys(userResponses).length);
+  }, [userResponses]);
 
   // Sample data structure
 
@@ -486,8 +484,8 @@ const TestEnv = () => {
         : response.response.map((item) => ({
             currentQuestion: item?.currentQuestion,
             questionId: item?.questionId,
-            answer: item?.response?.answer,
-            responseTime: item?.response?.responseTime,
+            answer: item?.response === null ? " " : item?.response?.answer,
+            responseTime: item?.response === null ? 0 : item?.response?.responseTime,
             timeSpent: item?.timeSpent,
           })),
     };
