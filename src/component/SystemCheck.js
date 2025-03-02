@@ -42,6 +42,7 @@ const SystemCheck = () => {
   const [errorMsg, setErrorMsg] = useState([]);
   const [step, setStep] = useState(0);
   const speechOutputRef = useRef(null);
+  const [isAnimating, setIsAnimating] = useState(false);
   const [isListening, setIsListening] = useState(false);
 
   // ✅ Check Browser Compatibility
@@ -105,11 +106,12 @@ const SystemCheck = () => {
     resetTranscript(); // Clear previous transcript
     setIsListening(true);
     SpeechRecognition.startListening({ continuous: true, language: "en-US" });
-
+    setIsAnimating(true)
     // Stop after 6 seconds
     setTimeout(() => {
       SpeechRecognition.stopListening();
       setIsListening(false);
+      setIsAnimating(false)
     }, 6000); // 6000ms = 6 seconds
   };
 
@@ -226,366 +228,312 @@ const SystemCheck = () => {
   }, []);
 
   return (
-    <div className="container-fluid tw-bg-gradient-to-br tw-from-blue-100 tw-to-purple-200">
-      <div className=" tw-bg-white tw-p-10  tw-w-full">
-        <h1 className="tw-text-3xl tw-font-bold tw-text-center tw-mb-8 tw-text-indigo-700">
+    <div className="container-fluid">
+      <div className=" tw-bg-white tw-p-8  tw-w-full">
+        <h1 className="tw-text-3xl tw-font-bold tw-text-center tw-mb-4 tw-text-indigo-700">
           Checking System Requirements
         </h1>
-        <div className="tw-mt-6 tw-mb-6">
-          <h2 className="tw-text-xl tw-text-center tw-font-semibold tw-text-gray-700">
-            {step < steps.length
-              ? `Performing ${steps[step]}...`
-              : "All checks complete!"}
-          </h2>
-        </div>
+        <div className="tw-max-w-3xl tw-mx-auto tw-px-3 tw-py-3">
+  <h2 className="tw-text-2xl tw-font-bold tw-text-center tw-bg-clip-text tw-text-transparent tw-bg-gradient-to-r tw-from-indigo-500 tw-to-purple-600 tw-mb-6">
+    {step < steps.length
+      ? `Step ${step}/${steps.length} · ${steps[step]}`
+      : "✓ All checks complete!"}
+  </h2>
+  
+  <div className="tw-relative tw-h-2 tw-bg-gray-100 dark:tw-bg-gray-800 tw-rounded-full tw-overflow-hidden tw-shadow-inner">
+    <div 
+      className="tw-absolute tw-top-0 tw-left-0 tw-h-full tw-bg-gradient-to-r tw-from-blue-500 tw-to-violet-600 tw-rounded-full tw-transition-all tw-duration-700 tw-ease-out"
+      style={{ width: `${((step + 0.5) / steps.length) * 100}%` }}
+    >
+      {/* Shimmer effect using Tailwind only */}
+      <div className="tw-absolute tw-inset-0 tw-flex">
+        <div className="tw-w-1/2 tw-h-full tw-bg-gradient-to-r tw-from-transparent tw-via-white/30 tw-to-transparent tw-transform tw-translate-x-full tw-animate-[shimmer_2s_infinite]"></div>
+      </div>
+    </div>
+  </div>
+  
+  <div className="tw-flex tw-justify-between tw-mt-3 tw-text-xs tw-text-gray-500 dark:tw-text-gray-400 tw-font-medium">
+    <span>Start</span>
+    <span>Complete</span>
+  </div>
+</div>
 
-        <div className=" tw-flex tw-gap-5 tw-justify-between tw-flex-wrap">
+
+        <div className=" tw-flex tw-gap-5 tw-justify-between tw-flex-wrap tw-mt-5">
           {/* Browser Check */}
-          <div
-            className={`
-      ${step === 0 && "tw-border-2 tw-border-blue-600 tw-border-solid"}
-      ${
-        isBrowserCompatible
-          ? "tw-border-2 tw-border-green-600 tw-border-solid"
-          : `tw-border-2 tw-border-red-600 tw-border-solid`
-      }
+          <div 
+  className={`tw-backdrop-blur-sm tw-bg-white/10 tw-rounded-2xl tw-overflow-hidden tw-transition-all tw-duration-500 tw-ease-out tw-transform hover:tw--translate-y-1 hover:tw-shadow-lg
+    ${step === 0 ? "tw-ring-2 tw-ring-blue-400 tw-shadow-lg tw-shadow-blue-500/20" : 
+      isBrowserCompatible ? "tw-ring-1 tw-ring-green-400" : "tw-ring-1 tw-ring-red-400"}`}
+>
+  <div className="tw-p-6">
+    <div className="tw-flex tw-items-center tw-justify-between tw-mb-6">
+      <div className="tw-flex tw-items-center">
+       
+        <h3 className="tw-text-lg tw-font-medium tw-text-black">Browser Check</h3>
+      </div>
+      <div className={`tw-w-12 tw-h-12 tw-rounded-full tw-flex tw-items-center tw-justify-center 
+        ${isBrowserCompatible ? "tw-bg-green-500/20 tw-text-green-400" : "tw-bg-red-500/20 tw-text-red-400"}`}>
+        {isBrowserCompatible 
+          ? <i className="fa fa-check-circle tw-text-2xl"></i> 
+          : <i className="fa fa-times-circle tw-text-2xl"></i>}
+      </div>
+    </div>
 
+    <div className="tw-bg-gradient-to-br tw-from-indigo-900/40 tw-to-purple-900/40 tw-rounded-xl tw-p-4 tw-mb-5 tw-border tw-border-white/10">
+   
+      <div className="tw-flex tw-items-center tw-p-3">
+        <div className="tw-w-12 tw-h-12 tw-bg-gradient-to-br tw-from-blue-500 tw-to-indigo-600 tw-rounded-xl tw-flex tw-items-center tw-justify-center tw-mr-4 tw-shadow-lg">
+          <span className="tw-text-white tw-text-lg tw-font-bold">{browserInfo.name.charAt(0)}</span>
+        </div>
+        <div>
+          <p className="tw-text-gray-600 tw-font-medium">{browserInfo.name}</p>
+          <p className="tw-text-gray-600 tw-text-sm">Version: {browserInfo.version}</p>
+        </div>
+      </div>
+  
+ </div>
     
-      tw-bg-gradient-to-br from-blue-50 to-blue-100
-      tw-rounded-xl 
-      tw-shadow-lg 
-      tw-p-4 
-      tw-max-w-xs 
-      tw-mx-auto 
-      tw-space-y-4
-      tw-transform transition-all duration-300 hover:tw-scale-105
-    `}
-          >
-            <div className="tw-flex tw-justify-between tw-items-center tw-gap-3">
-              <h2 className="tw-text-2xl tw-font-bold tw-text-gray-800">
-                Browser Check
-              </h2>
-              <div
-                className={`
-          tw-w-12 tw-h-12 tw-rounded-full tw-flex tw-items-center tw-justify-center
-          ${isBrowserCompatible ? "tw-bg-green-100" : "tw-bg-red-100"}
-        `}
-              >
-                {isBrowserCompatible ? (
-                  <i className="fas fa-check-circle tw-text-green-600 tw-text-2xl"></i>
-                ) : (
-                  <i className="fas fa-times-circle tw-text-red-600 tw-text-2xl"></i>
-                )}
-              </div>
-            </div>
+  
+    
+    <div className={`tw-rounded-xl tw-py-2 tw-px-4 tw-font-medium tw-transition-all tw-duration-300 tw-flex tw-items-center tw-justify-center
+      ${isBrowserCompatible 
+        ? "tw-bg-green-500/20 tw-text-green-500 tw-border tw-border-green-500/30" 
+        : "tw-bg-red-500/20 tw-text-red-300 tw-border tw-border-red-500/30"}`}>
+      {isBrowserCompatible 
+        ? <i className="fa fa-check-circle tw-mr-2"></i> 
+        : <i className="fa fa-times-circle tw-mr-2"></i>}
+      <span>Browser {isBrowserCompatible ? "Compatible" : "Not Compatible"}</span>
+    </div>
+  </div>
+</div>
 
-            <div className="tw-flex tw-items-center tw-space-x-4 tw-bg-white tw-rounded-lg tw-p-3 tw-shadow-sm">
-              <div className="tw-relative">
-                <div className="tw-w-16 tw-h-16 tw-bg-blue-100 tw-rounded-full tw-flex tw-items-center tw-justify-center">
-                  <i className="fab fa-chrome tw-text-blue-500 tw-text-3xl"></i>
-                </div>
-                {isBrowserCompatible ? (
-                  <i className="fas fa-check-circle tw-absolute tw-top-0 tw-right-0 tw-text-green-500 tw-bg-white tw-rounded-full tw-text-lg"></i>
-                ) : (
-                  <i className="fas fa-times-circle tw-absolute tw-top-0 tw-right-0 tw-text-red-500 tw-bg-white tw-rounded-full tw-text-lg"></i>
-                )}
-              </div>
-              <div>
-                <p className="tw-text-gray-700 tw-font-semibold">
-                  {browserInfo.name}
-                </p>
-                <p className="tw-text-gray-500 tw-text-sm">
-                  Version: {browserInfo.version}
-                </p>
-              </div>
-            </div>
-
-            <div
-              className={`
-        p-2 rounded-lg text-center font-medium
-        ${
-          isBrowserCompatible
-            ? "bg-green-50 text-green-700"
-            : "bg-red-50 text-red-700"
-        }
-      `}
-            >
-              Status: {isBrowserCompatible ? "Compatible" : "Incompatible"}
-            </div>
-          </div>
 
           {/* Web Cam Check */}
 
-          <div
-            className={`
-      ${step === 1 && "tw-border-2 tw-border-blue-600 tw-border-solid"}
-      ${
-        isWebcamAvailable
-          ? "tw-border-2 tw-border-green-600 tw-border-solid"
-          : `tw-border-2 tw-border-red-600 tw-border-solid`
-      }
-
+          <div 
+  className={`tw-backdrop-blur-sm tw-bg-white tw-rounded-2xl tw-overflow-hidden tw-transition-all tw-duration-500 tw-ease-out tw-transform hover:tw--translate-y-1 hover:tw-shadow-lg
+    ${step === 1 ? "tw-ring-2 tw-ring-blue-400 tw-shadow-lg tw-shadow-blue-500/20" : 
+      isWebcamAvailable ? "tw-ring-1 tw-ring-green-400" : "tw-ring-1 tw-ring-red-400"}`}
+>
+  <div className="tw-p-6">
+    <div className="tw-flex tw-items-center tw-justify-between tw-mb-6">
+      <div className="tw-flex tw-items-center">
+      
+        <h3 className="tw-text-lg tw-font-medium tw-text-black">Camera Check</h3>
+      </div>
+      <div className={`tw-w-12 tw-h-12 tw-rounded-full tw-flex tw-items-center tw-justify-center 
+        ${isWebcamAvailable ? "tw-bg-green-500/20 tw-text-green-400" : "tw-bg-red-500/20 tw-text-red-400"}`}>
+        {isWebcamAvailable 
+          ? <i className="fa fa-check-circle tw-text-2xl"></i> 
+          : <i className="fa fa-times-circle tw-text-2xl"></i>}
+      </div>
+    </div>
     
-      tw-bg-gradient-to-br from-blue-50 to-blue-100
-      tw-rounded-xl 
-      tw-shadow-lg 
-      tw-p-4 
-      tw-w-[260px] 
-      tw-mx-auto 
-      tw-space-y-4
-      tw-transform transition-all duration-300 hover:tw-scale-105
-    `}
-          >
-            <div className="tw-flex tw-justify-between tw-items-center tw-gap-3">
-              <h2 className="tw-text-2xl tw-font-bold tw-text-gray-800">
-                Camera Check
-              </h2>
-              <div
-                className={`
-          tw-w-12 tw-h-12 tw-rounded-full tw-flex tw-items-center tw-justify-center
-          ${isWebcamAvailable ? "tw-bg-green-100" : "tw-bg-red-100"}
-        `}
-              >
-                {isWebcamAvailable ? (
-                  <i className="fas fa-check-circle tw-text-green-600 tw-text-2xl"></i>
-                ) : (
-                  <i className="fas fa-times-circle tw-text-red-600 tw-text-2xl"></i>
-                )}
-              </div>
-            </div>
-
-            <div className="tw-flex tw-items-center tw-space-x-4 tw-bg-white tw-rounded-lg tw-p-3 tw-shadow-sm">
-              <div className="tw-relative">
-                <div className="tw-w-16 tw-h-16 tw-bg-blue-100 tw-rounded-full tw-flex tw-items-center tw-justify-center">
-                  <i className="fa-solid fa-camera tw-text-blue-500 tw-text-3xl"></i>
-                </div>
-                {isWebcamAvailable ? (
-                  <i className="fas fa-check-circle tw-absolute tw-top-0 tw-right-0 tw-text-green-500 tw-bg-white tw-rounded-full tw-text-lg"></i>
-                ) : (
-                  <i className="fas fa-times-circle tw-absolute tw-top-0 tw-right-0 tw-text-red-500 tw-bg-white tw-rounded-full tw-text-lg"></i>
-                )}
-              </div>
-              <div>
-                <p className="tw-text-gray-700 tw-font-semibold">Camera</p>
-                <p className="tw-text-gray-500 tw-text-sm">
-                  {isWebcamAvailable ? "Granted" : "Not Granted"}
-                </p>
-              </div>
-            </div>
-
-            <div
-              className={`
-        p-2 rounded-lg text-center font-medium
-        ${
-          isWebcamAvailable
-            ? "bg-green-50 text-green-700"
-            : "bg-red-50 text-red-700"
-        }
-      `}
-            >
-              Status: {isWebcamAvailable ? "Granted" : "Not Granted"}
-            </div>
-          </div>
+    <div className="tw-bg-gradient-to-br tw-from-indigo-900/40 tw-to-purple-900/40 tw-rounded-xl tw-p-6 tw-mb-4 tw-border tw-border-white/10 tw-flex tw-flex-col tw-items-center tw-justify-center tw-h-36">
+      <div className={`tw-w-16 tw-h-16 tw-rounded-full tw-bg-white/5  tw-flex tw-items-center tw-justify-center tw-mb-3 tw-border tw-border-white/10
+        ${isWebcamAvailable ? "tw-shadow-lg tw-shadow-green-500/20" : ""}`}>
+        <i className={`fa fa-camera tw-text-2xl ${isWebcamAvailable ? "tw-text-blue-400" : "tw-text-white"}`}></i>
+      </div>
+      <p className={`tw-font-medium tw-text-sm ${isWebcamAvailable ? "tw-text-white" : "tw-text-white"}`}>
+        {isWebcamAvailable ? "Camera access granted" : "Camera access needed"}
+      </p>
+    </div>
+    
+    <div className={`tw-rounded-xl tw-py-2 tw-px-4 tw-font-medium tw-transition-all tw-duration-300 tw-flex tw-items-center tw-justify-center
+      ${isWebcamAvailable 
+        ? "tw-bg-green-200 tw-text-green-500 tw-border tw-border-green-500" 
+        : "tw-bg-red-500 tw-text-red-300 tw-border tw-border-red-500"}`}>
+      {isWebcamAvailable 
+        ? <i className="fa fa-check-circle tw-mr-2 tw-text-xl"></i> 
+        : <i className="fa fa-times-circle tw-mr-2 tw-text-xl"></i>}
+      <span>Camera {isWebcamAvailable ? "Access Granted" : "Access Needed"}</span>
+    </div>
+  </div>
+</div>
 
           {/* Mic check */}
 
-          <div
-            className={`
-      ${step === 2 && "tw-border-2 tw-border-blue-600 tw-border-solid"}
-      ${
-        isMicrophoneAvailable
-          ? "tw-border-2 tw-border-green-600 tw-border-solid"
-          : `tw-border-2 tw-border-red-600 tw-border-solid`
-      }
-
+          <div 
+  className={`tw-backdrop-blur-sm tw-bg-white/10 tw-rounded-2xl tw-overflow-hidden tw-transition-all tw-duration-500 tw-ease-out tw-transform hover:-tw-translate-y-1 hover:tw-shadow-lg
+    ${step === 2 ? "tw-ring-2 tw-ring-blue-400 tw-shadow-lg tw-shadow-blue-500/20" : 
+      isMicrophoneAvailable ? "tw-ring-1 tw-ring-green-400" : "tw-ring-1 tw-ring-red-400"}`}
+>
+  <div className="tw-p-6">
+    <div className="tw-flex tw-items-center tw-justify-between tw-mb-6">
+      <div className="tw-flex tw-items-center">
+       
+        <h3 className="tw-text-lg tw-font-medium tw-text-black">Microphone Check</h3>
+      </div>
+      <div className={`tw-w-12 tw-h-12 tw-rounded-full tw-flex tw-items-center tw-justify-center 
+        ${isMicrophoneAvailable ? "tw-bg-green-500/20 tw-text-green-400" : "tw-bg-red-500/20 tw-text-red-400"}`}>
+        {isMicrophoneAvailable 
+          ?  <i className="fas fa-check-circle tw-text-green-600 tw-text-2xl"></i>
+          : <i className="fas fa-times-circle tw-text-red-600 tw-text-2xl"></i>}
+      </div>
+    </div>
     
-      tw-bg-gradient-to-br from-blue-50 to-blue-100
-      tw-rounded-xl 
-      tw-shadow-lg 
-      tw-p-4
-      
-      tw-w-[260px]
-      tw-mx-auto 
-      tw-space-y-4
-      tw-transform transition-all duration-300 hover:tw-scale-105
-    `}
-          >
-            <div className="tw-flex tw-justify-between tw-items-center tw-gap-3">
-              <h2 className="tw-text-2xl tw-font-bold tw-text-gray-800">
-                Mic Check
-              </h2>
-              <div
-                className={`
-          tw-w-12 tw-h-12 tw-rounded-full tw-flex tw-items-center tw-justify-center
-          ${isMicrophoneAvailable ? "tw-bg-green-100" : "tw-bg-red-100"}
-        `}
-              >
-                {isMicrophoneAvailable ? (
-                  <i className="fas fa-check-circle tw-text-green-600 tw-text-2xl"></i>
-                ) : (
-                  <i className="fas fa-times-circle tw-text-red-600 tw-text-2xl"></i>
-                )}
-              </div>
-            </div>
-
-            <div className="tw-bg-gradient-to-br tw-from-indigo-50 tw-to-indigo-100 tw-rounded-lg tw-p-4 tw-shadow-sm tw-overflow-hidden tw-h-[128px]">
-              <h3 className="tw-text-xl tw-font-semibold tw-text-pink-600 tw-mb-3">
-                Captured Audio
-              </h3>
-              <div className="tw-bg-pink-50 tw-p-3 tw-rounded-md tw-border tw-border-pink-100 ">
-                <p className="tw-text-pink-800 tw-font-medium tw-overflow-hidden">
-                  {transcript.slice(0, 20)}
-                </p>
-              </div>
-            </div>
-
-            <div
-              className={`tw-mt-4 tw-px-6 tw-py-2 tw-border-2 ${
-                isListening ? "tw-border-gray-400" : "tw-border-success"
-              } 
-  tw-rounded-full tw-text-center tw-cursor-pointer 
-  ${
-    isListening
-      ? "tw-bg-gray-300 tw-text-gray-500"
-      : "tw-bg-green-500 tw-text-white"
-  } 
-  hover:${isListening ? "tw-bg-gray-300" : "tw-bg-green-600"} 
-  tw-font-semibold tw-text-sm tw-transition-all tw-duration-200 tw-transform hover:tw-scale-105 focus:outline-none`}
-              disabled={isListening}
-              onClick={handleStartListening}
-            >
-              Test Mic
-            </div>
+    <div className="tw-bg-gradient-to-br tw-from-indigo-900/40 tw-to-purple-900/40 tw-rounded-xl tw-p-4 tw-mb-4 tw-border tw-border-white/10">
+      <div className="tw-flex tw-items-center tw-mb-3">
+        <i className={`fa-solid fa-wave-square tw-h-5 tw-w-5 tw-mr-2 ${isAnimating ? "tw-text-purple-400" : "tw-text-white/60"}`}></i>
+        <h4 className="tw-text-white tw-font-medium">Captured Audio</h4>
+      </div>
+      <div className="tw-bg-white/5 tw-backdrop-blur-sm tw-rounded-xl tw-p-3 tw-border tw-border-white/10 tw-min-h-16 tw-flex tw-items-center">
+        {isAnimating && (
+          <div className="tw-flex tw-items-center tw-space-x-1 tw-mx-auto">
+            {[1, 2, 3, 4, 5].map((bar) => (
+              <div 
+                key={bar}
+                className="tw-w-1 tw-bg-purple-400 tw-rounded-full tw-animate-pulse"
+                style={{ 
+                  height: `${Math.random() * 20 + 5}px`,
+                  animationDelay: `${bar * 0.1}s`
+                }}
+              ></div>
+            ))}
           </div>
+        )}
+        {!isAnimating && transcript ? (
+          <p className="tw-text-white/80">{transcript}</p>
+        ) : !isAnimating ? (
+          <p className="tw-text-white/40 tw-italic">Click "Test Mic" to begin...</p>
+        ) : null}
+      </div>
+    </div>
+    
+    <button 
+      onClick={handleStartListening}
+      disabled={isListening}
+      className={`tw-w-full tw-py-2.5 tw-rounded-xl tw-font-medium tw-transition-all tw-duration-300 tw-flex tw-items-center tw-justify-center
+        ${isListening 
+          ? "tw-bg-white/5 tw-text-white/40 tw-cursor-not-allowed tw-border tw-border-white/10" 
+          : "tw-bg-gradient-to-r tw-from-blue-500 tw-to-indigo-600 tw-text-white hover:tw-shadow-lg hover:tw-shadow-blue-500/20 tw-border tw-border-blue-400/30"
+        }`}
+    >
+      <i className={`fa-solid fa-microphone tw-w-4 tw-h-4 tw-mr-2 ${isListening ? "tw-animate-pulse" : ""}`}></i>
+      {isListening ? "Listening..." : "Test Microphone"}
+    </button>
+  </div>
+</div>
+
           {/* Network */}
-          <div
-            className={`
-      ${step === 3 && "tw-border-2 tw-border-blue-600 tw-border-solid"}
-      ${
-        isNetworkOnline
-          ? "tw-border-2 tw-border-green-600 tw-border-solid"
-          : `tw-border-2 tw-border-red-600 tw-border-solid`
-      }
-
+          <div 
+  className={`tw-backdrop-blur-sm tw-bg-white/10 tw-rounded-2xl tw-overflow-hidden tw-transition-all tw-duration-500 tw-ease-out tw-transform hover:-tw-translate-y-1 hover:tw-shadow-lg
+    ${step === 3 ? "tw-ring-2 tw-ring-blue-400 tw-shadow-lg tw-shadow-blue-500/20" : 
+      isNetworkOnline ? "tw-ring-1 tw-ring-green-400" : "tw-ring-1 tw-ring-red-400"}`}
+>
+  <div className="tw-p-6">
+    <div className="tw-flex tw-items-center tw-justify-between tw-mb-6">
+      <div className="tw-flex tw-items-center">
+       
+        <h3 className="tw-text-lg tw-font-medium tw-text-black">Network Check</h3>
+      </div>
+      <div className={`tw-w-12 tw-h-12 tw-rounded-full tw-flex tw-items-center tw-justify-center 
+        ${isNetworkOnline ? "tw-bg-green-500/20 tw-text-green-400" : "tw-bg-red-500/20 tw-text-red-400"}`}>
+        {isNetworkOnline 
+          ?  <i className="fas fa-check-circle tw-text-green-600 tw-text-2xl"></i>
+          : <i className="fas fa-times-circle tw-text-red-600 tw-text-2xl"></i>}
+      </div>
+    </div>
     
-      tw-bg-gradient-to-br from-blue-50 to-blue-100
-      tw-rounded-xl 
-      tw-shadow-lg 
-      tw-p-4 
-      tw-w-[260px] 
-      tw-mx-auto 
-      tw-space-y-4
-      tw-transform transition-all duration-300 hover:tw-scale-105
-    `}
-          >
-            <div className="tw-flex tw-justify-between tw-items-center tw-gap-3">
-              <h3 className="tw-text-2xl tw-font-bold tw-text-gray-800">
-                Network Check
-              </h3>
-              <div
-                className={`
-          tw-w-12 tw-h-12 tw-rounded-full tw-flex tw-items-center tw-justify-center
-          ${isNetworkOnline ? "tw-bg-green-100" : "tw-bg-red-100"}
-        `}
-              >
-                {isNetworkOnline ? (
-                  <i className="fas fa-check-circle tw-text-green-600 tw-text-2xl"></i>
-                ) : (
-                  <i className="fas fa-times-circle tw-text-red-600 tw-text-2xl"></i>
-                )}
-              </div>
+    <div className="tw-bg-gradient-to-br tw-from-indigo-900/40 tw-to-purple-900/40 tw-rounded-xl tw-p-4 tw-mb-4 tw-border tw-border-white/10">
+      <div className="tw-flex tw-mb-3 tw-p-3">
+        <div className="tw-w-12 tw-h-12 tw-bg-gradient-to-br tw-from-cyan-500 tw-to-blue-600 tw-rounded-xl tw-flex tw-items-center tw-justify-center tw-mr-4 tw-shadow-lg">
+        <i class="fa-solid fa-wifi"></i>
+        </div>
+        <div className=" tw-flex-col ">
+          <p className="tw-text-gray-600 tw-font-medium">Network Speed</p>
+          <div className="tw-flex tw-items-center tw-justify-center  tw-gap-3">
+            <div className="tw-flex tw-items-end tw-space-x-0.5">
+              {[1, 2, 3, 4, 5].map((bar) => (
+                <div 
+                  key={bar}
+                  className={`tw-w-1.5 tw-rounded-t-sm ${
+                    bar <= Number(Math.round(Network))/2 ? "tw-bg-cyan-400" : "tw-bg-white/20"
+                  }`}
+                  style={{ height: `${4 + bar * 3}px` }}
+                ></div>
+              ))}
             </div>
-
-            <div className="tw-flex tw-items-center tw-space-x-4 tw-bg-white tw-rounded-lg tw-p-3 tw-shadow-sm">
-              <div className="tw-relative">
-                <div className="tw-w-16 tw-h-16 tw-bg-blue-100 tw-rounded-full tw-flex tw-items-center tw-justify-center">
-                  <i className="fa-solid fa-wifi tw-text-blue-500 tw-text-3xl"></i>
-                </div>
-                {isNetworkOnline ? (
-                  <i className="fas fa-check-circle tw-absolute tw-top-0 tw-right-0 tw-text-green-500 tw-bg-white tw-rounded-full tw-text-lg"></i>
-                ) : (
-                  <i className="fas fa-times-circle tw-absolute tw-top-0 tw-right-0 tw-text-red-500 tw-bg-white tw-rounded-full tw-text-lg"></i>
-                )}
-              </div>
-              <div>
-                <p className="tw-text-gray-700 tw-font-semibold">Network</p>
-                <p className="tw-text-gray-500 tw-text-sm">
-                  <span>
-                    Speed : <TestNetworkSpeed />
-                  </span>
-                </p>
-              </div>
-            </div>
-
-            <div
-              className={`
-        p-2 rounded-lg text-center font-medium
-        ${
-          isNetworkOnline
-            ? "bg-green-50 text-green-700"
-            : "bg-red-50 text-red-700"
-        }
-      `}
-            >
-              Status:{" "}
-              {Number(Math.round(Network)) > 2 ? "Strong Speed" : "Weak Speed"}
-            </div>
+            <p className=" tw-text-sm tw-font-medium tw-text-gray-600 tw-mt-2"><TestNetworkSpeed /></p>
           </div>
         </div>
+      </div>
+    </div>
+    
+    <div className={`tw-rounded-xl tw-py-2 tw-px-4 tw-font-medium tw-transition-all tw-duration-300 tw-flex tw-items-center tw-justify-center tw-gap-5
+      ${isNetworkOnline 
+        ? "tw-bg-green-500/20 tw-text-green-600 tw-border tw-border-green-500/30" 
+        : "tw-bg-red-500/20 tw-text-red-300 tw-border tw-border-red-500/30"}`}>
+      {isNetworkOnline 
+        ? <i className="fas fa-check-circle tw-text-green-600 tw-text-2xl"></i>
+        : <i className="fas fa-times-circle tw-text-red-600 tw-text-2xl"></i>}
+      <span>{Number(Math.round(Network)) > 2  ? "Strong Connection" : "Weak Connection"}</span>
+    </div>
+  </div>
+</div>
 
-        <div className=" tw-flex tw-justify-center tw-mt-7 tw-flex-col tw-gap-4">
-          {errorMsg.length === 0 ? (
-            <p className="tw-text-green-600 tw-m-auto tw-w-2/5 tw-bg-green-100 tw-border tw-border-green-400 tw-px-4 tw-py-2 tw-rounded-md tw-shadow-md">
-              It is Mandatory to check Mic first , ✅ All systems are
-              functioning properly.
-            </p>
-          ) : (
-            errorMsg.map((msg) => {
-              return (
-                <p className="tw-w-2/5 tw-m-auto tw-flex tw-items-center tw-gap-2 tw-bg-red-100 tw-text-red-700 tw-border tw-border-red-400 tw-px-4 tw-py-2 tw-rounded-md tw-shadow-md tw-animate-pulse">
-                  <svg
-                    className="tw-w-5 tw-h-5 tw-text-red-600"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 9v2m0 4h.01M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"
-                    ></path>
-                  </svg>
-                  {msg}
-                </p>
-              );
-            })
-          )}
-
-          {isMicrophoneAvailable &&
-          isWebcamAvailable &&
-          isNetworkOnline &&
-          isBrowserCompatible &&
-          step >= 3 &&
-          transcript.length != 0 ? (
-            <button
-              onClick={clickhandle}
-              className={`tw-bg-green-500 tw-px-8 tw-rounded-md tw-shadow-lg  tw-py-1 tw-border-0 tw-w-44 tw-m-auto`}
-            >
-              {" "}
-              Proceed to test
-            </button>
-          ) : (
-            <button
-              onClick={clickhandle}
-              className={`tw-bg-green-600 tw-px-8 tw-rounded-md tw-w-44 tw-m-auto tw-shadow-lg  tw-py-1 tw-border-0`}
-              disabled
-            >
-              {" "}
-              Proceed to test
-            </button>
-          )}
         </div>
+
+        <div className="tw-flex tw-justify-center tw-mt-8 tw-flex-col tw-gap-5 tw-max-w-2xl tw-mx-auto">
+  {errorMsg.length === 0 ? (
+    <div className="tw-bg-emerald-50 tw-border tw-border-emerald-200 tw-rounded-lg tw-overflow-hidden tw-shadow-sm">
+      <div className="tw-px-4 tw-py-3 tw-flex tw-items-center tw-gap-3">
+        <span className="tw-flex-shrink-0 tw-w-8 tw-h-8 tw-flex tw-items-center tw-justify-center tw-rounded-full tw-bg-emerald-100">
+          <svg className="tw-w-5 tw-h-5 tw-text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </span>
+        {step === 3 ? (<p className="tw-text-emerald-700 tw-font-medium">
+          <span className="tw-text-emerald-600">Great! All hardware checks passed. You're ready to proceed.</span>
+        </p>):(<p className="text-yellow-700 font-medium">
+        <span className="font-bold">Important:</span> It is mandatory to check your microphone first before proceeding.
+      </p>)}
+       
+      </div>
+    </div>
+  ) : (
+    <div className="tw-space-y-3">
+      {errorMsg.map((msg, index) => (
+        <div key={index} className="tw-bg-red-50 tw-border tw-border-red-200 tw-rounded-lg tw-overflow-hidden tw-shadow-sm">
+          <div className="tw-px-4 tw-py-3 tw-flex tw-items-center tw-gap-3">
+            <span className="tw-flex-shrink-0 tw-w-8 tw-h-8 tw-flex tw-items-center tw-justify-center tw-rounded-full tw-bg-red-100">
+              <svg className="tw-w-5 tw-h-5 tw-text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z" />
+              </svg>
+            </span>
+            <p className="tw-text-red-700 tw-font-medium">{msg}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+
+  <div className="tw-mt-2 tw-flex tw-justify-center">
+    {isMicrophoneAvailable &&
+    isWebcamAvailable &&
+    isNetworkOnline &&
+    isBrowserCompatible &&
+    step >= 3 &&
+    transcript.length != 0 ? (
+      <button
+        onClick={clickhandle}
+        className="tw-relative tw-px-6 tw-py-2.5 tw-bg-gradient-to-r tw-from-green-500 tw-to-emerald-600 tw-text-white tw-font-medium tw-rounded-lg tw-shadow-md hover:tw-shadow-lg tw-transform hover:-tw-translate-y-0.5 tw-transition-all tw-duration-200 tw-overflow-hidden tw-group"
+      >
+        <span className="tw-relative tw-z-10">Proceed to Test</span>
+        <span className="tw-absolute tw-inset-0 tw-w-full tw-h-full tw-bg-white/20 tw-transform tw-scale-x-0 group-hover:tw-scale-x-100 tw-transition-transform tw-origin-left tw-duration-300"></span>
+      </button>
+    ) : (
+      <button
+        disabled
+        className="tw-px-6 tw-py-2.5 tw-bg-gray-400 tw-text-white tw-font-medium tw-rounded-lg tw-shadow-sm tw-opacity-75 tw-cursor-not-allowed"
+      >
+        Proceed to Test
+      </button>
+    )}
+  </div>
+</div>
+
       </div>
     </div>
   );

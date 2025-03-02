@@ -268,6 +268,7 @@ const TestLib = () => {
                     click={() => {
                       linkClicked(test?._id);
                     }}
+                    isOrg = {UserDetails?.isOrganisation}
                   />
                 ))
               )

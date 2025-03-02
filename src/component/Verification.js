@@ -1,6 +1,6 @@
 import { React, useRef, useState, useCallback, useEffect } from "react";
 import Webcam from "react-webcam";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Good from "../assests/good.png";
 import Bad from "../assests/Bad.png";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +23,7 @@ import {
 
 const Verification = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const UserDetails = useSelector((store) => store.User.item);
   const [activeTab, setActiveTab] = useState("registration"); 
   const [loading, setLoading] = useState(false);
@@ -451,8 +452,8 @@ const Verification = () => {
                     Email
                   </label>
                   <input
-                    type={UserDetails?.Email}
-                    value="johndoe@example.com"
+                    type="text"
+                    value={UserDetails?.Email}
                     disabled
                     className="tw-bg-gray-100 tw-rounded-lg tw-shadow-sm tw-w-full tw-p-2"
                   />
@@ -617,12 +618,15 @@ const Verification = () => {
 
         {activeTab === "captureCard" && (
           <div className=" tw-mt-14 tw-flex tw-justify-center">
-            <Link
-              to={`/systemcheck/${id}`}
-              className=" tw-px-8 tw-py-2 tw-bg-green-500 tw-border-0 tw-rounded-md tw-shadow-md tw-no-underline tw-text-white tw-font-semibold hover:tw-bg-green-600 tw-transition-all tw-duration-300"
+            <button
+              onClick = {()=>{
+                navigate(`/systemcheck/${id}`)
+              }}
+              disabled={!faceStatus || !idStatus}
+              className=" tw-px-8 tw-py-2 tw-bg-green-500 tw-border-0 tw-rounded-md tw-shadow-md tw-no-underline tw-text-white tw-font-semibold hover:tw-bg-green-600 tw-transition-all tw-duration-300 disabled:tw-opacity-50 disabled:tw-cursor-not-allowed"
             >
               Proceed to the Test
-            </Link>
+            </button>
           </div>
         )}
       </div>
