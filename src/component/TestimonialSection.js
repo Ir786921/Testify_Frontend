@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import image1 from "../assests/principle.jpeg";
 import image2 from "../assests/Shivam.jpeg";
+import pramod from "../assests/pramod.jpeg";
+import vivek from "../assests/vivek.jpeg"
+import cooper from "../assests/cooper.jpeg";
 
 
 const TestimonialSection = () => {
@@ -9,7 +12,7 @@ const TestimonialSection = () => {
   const testimonials = [
     {
       name: "Sugandha Mishra",
-      position: "Head of Institution",
+      position: "Head of Institution[VPS]",
       description:
         '"Tesify has completely streamlined our Entrance process. The AI-driven insights and automated scoring save us hours of manual work!"',
       bgColor: "tw-bg-blue-400",
@@ -26,27 +29,40 @@ const TestimonialSection = () => {
       starVisible: true,
     },
     {
-      name: "Arielle Copper",
-      position: "hr",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor",
+      name: "Vivek Kumar",
+      position: "Director",
+      description:"Using Tesify has streamlined our examination process significantly. The platform's AI-driven monitoring and automated evaluation have enhanced efficiency and fairness, making assessments seamless and reliable.",
       bgColor: "tw-bg-[#4AAB9B]",
+      image:vivek,
       starVisible: false,
     },
     {
-      name: "Arielle Copper",
-      position: "wb",
+      name: "Pramod Kumar",
+      position: "Hiring Manager",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor",
+        "Tesify has transformed the way we evaluate candidates, offering a structured and data-driven assessment approach. The platform’s analytics and automated scoring help us identify top talent efficiently and make informed hiring decisions.",
       bgColor: "tw-bg-[#2298C0]",
+      image:pramod,
       starVisible: false,
     },
     {
       name: "Arielle Copper",
-      position: "sde",
+      position: "HR",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor",
+       "Tesify has completely transformed our hiring process. The detailed candidate analytics and customizable assessments allow us to make data-driven decisions, saving both time and effort."
+
+
+
+
+
+
+
+
+
+
+,
       bgColor: "tw-bg-[#76C367]",
+      image:cooper,
       starVisible: false,
     },
   ];
@@ -88,7 +104,7 @@ const TestimonialSection = () => {
               />
 
               {/* Main card */}
-              <div className="tw-absolute tw-top-0 tw-left-0 tw-bg-white tw-rounded-lg tw-p-6 tw-shadow-lg tw-w-64 tw-h-64 tw-overflow-hidden">
+              <div className="tw-absolute tw-top-0 tw-left-0 tw-bg-white tw-rounded-lg tw-p-6 tw-shadow-lg tw-w-[270px] tw-h-[270px] tw-overflow-hidden">
                 {/* Profile image */}
                 <div className="tw-flex tw-justify-center tw-mb-4">
                   <div className="tw-w-16 tw-h-16 tw-rounded-full tw-overflow-hidden">
@@ -113,20 +129,7 @@ const TestimonialSection = () => {
                   </p>
                 </div>
 
-                {/* Star icon */}
-                {/* {testimonial.starVisible && (
-                <div className="tw-absolute -tw-bottom-3 tw-left-1/2 tw-transform -tw-translate-x-1/2">
-                  <div className="tw-bg-white tw-rounded-full tw-p-2 tw-shadow-md">
-                    <svg
-                      className="tw-w-5 tw-h-5 tw-text-yellow-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  </div>
-                </div>
-              )} */}
+               
               </div>
             </div>
           ))}

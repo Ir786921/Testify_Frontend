@@ -2,21 +2,38 @@ import React from "react";
 import { Link } from "react-router-dom";
 import logo from "../assests/logo.png";
 import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
 
 const Footer = () => {
-  const username = useSelector((Store) => Store.User);
+  const username = useSelector((Store) => Store.User.item);
   const handleClick = () => {
-    if (username?.uid) {
+    if (username) {
       navigate("/test");
     } else {
-      swal("Please Login to Access Library");
+      Swal.fire({
+                            title: "🔒 Access Restricted!",
+                            html: `<p class="tw-text-lg tw-font-semibold tw-text-white">You need to logIn to explore the library.</p>`,
+                            icon: "warning",
+                            timer: 5000,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
+                            backdrop: `rgba(0,0,0,0.6)`,
+                            toast: false,
+                            position: "center",
+                            customClass: {
+                              popup:
+                                "tw-rounded-2xl tw-bg-gradient-to-br tw-from-emerald-500 tw-to-green-700 tw-shadow-xl",
+                              title: "tw-text-xl tw-font-bold tw-text-white",
+                              htmlContainer: "tw-text-center",
+                            },
+                          });
     }
   };
 
   return (
     <footer className="tw-bg-[#0A0A0A] tw-text-white tw-pt-10 tw-pb-5 tw-px-6">
       <div className="tw-flex md:tw-flex-row tw-flex-col md:tw-justify-evenly tw-justify-center tw-gap-8">
-        <div className="tw-flex tw-flex-col tw-items-start tw-justify-center border border-success tw-m-auto" >
+        <div className="tw-flex tw-flex-col tw-items-start tw-justify-center  tw-m-auto">
           <Link
             to="/"
             className="tw-flex tw-items-center tw-space-x-3 tw-no-underline tw-text-gray-400"
@@ -32,25 +49,11 @@ const Footer = () => {
           </p>
         </div>
 
-        <div className=" tw-m-auto">
+        <div className=" tw-m-auto md:tw-block tw-hidden">
           <h4 className="tw-text-lg tw-font-semibold tw-mb-4">Quick Links</h4>
           <ul className="tw-space-y-2 tw-list-none tw-m-auto">
-            <li>
-              <Link
-                to="/about"
-                className="tw-text-gray-400 hover:tw-text-white tw-no-underline"
-              >
-                About Us
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/services"
-                className="tw-text-gray-400 hover:tw-text-white tw-no-underline tw-list-none"
-              >
-                Services
-              </Link>
-            </li>
+           
+         
             <li>
               <span
                 onClick={handleClick}
@@ -61,7 +64,7 @@ const Footer = () => {
             </li>
             <li>
               <Link
-                to="/contact"
+                to="/Contact"
                 className="tw-text-gray-400 hover:tw-text-white tw-no-underline"
               >
                 Contact
@@ -70,18 +73,58 @@ const Footer = () => {
           </ul>
         </div>
 
-        <div className=" tw-m-auto">
+        <div className="md:tw-block tw-hidden tw-m-auto">
           <h4 className="tw-text-lg tw-font-semibold tw-mb-4">Contact Us</h4>
           <p className="tw-text-gray-400">
-            <i className="fa-solid fa-phone tw-mr-2"></i> +1 (123) 456-7890
+            <i className="fa-solid fa-phone tw-mr-2"></i> +91 (620) 096-6346
           </p>
           <p className="tw-text-gray-400">
             <i className="fa-solid fa-envelope tw-mr-2"></i> support@testify.com
           </p>
           <p className="tw-text-gray-400">
-            <i className="fa-solid fa-map-marker-alt tw-mr-2"></i> 123 Testify
-            St, Innovation City, TX
+            <i className="fa-solid fa-map-marker-alt tw-mr-2"></i> Street 13
+            Noida Sector,62
           </p>
+        </div>
+
+        <div className="md:tw-hidden tw-flex tw-justify-between"> 
+        <div className="tw-m-auto">
+          <h4 className="tw-text-lg tw-font-semibold tw-mb-4">Quick Links</h4>
+          <ul className="tw-space-y-2 tw-list-none tw-m-auto">
+          
+            <li>
+              <span
+                onClick={handleClick}
+                className="tw-text-gray-400 tw-cursor-pointer hover:tw-text-white"
+              >
+                Test Library
+              </span>
+            </li>
+            <li>
+              <Link
+                to="/Contact"
+                className="tw-text-gray-400 hover:tw-text-white tw-no-underline"
+              >
+                Contact
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        <div className="tw-m-auto">
+          <h4 className="tw-text-lg tw-font-semibold tw-mb-4">Contact Us</h4>
+          <p className="tw-text-gray-400">
+            <i className="fa-solid fa-phone tw-mr-2"></i> +91 (620) 096-6346
+          </p>
+          <p className="tw-text-gray-400">
+            <i className="fa-solid fa-envelope tw-mr-2"></i> support@testify.com
+          </p>
+          <p className="tw-text-gray-400">
+            <i className="fa-solid fa-map-marker-alt tw-mr-2"></i> Street 13
+            Noida Sector,62
+          </p>
+        </div>
+
         </div>
       </div>
 

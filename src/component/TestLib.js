@@ -3,12 +3,13 @@ import React, { Component, useContext, useEffect, useRef, useState } from "react
 import TestCard from "./TestCard";
 
 
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 
 import Shimmer from "./Shimmer";
 const TestLib = () => {
+ 
   const [searchText, setSearchText] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [allTest, setAllTest] = useState([]);
@@ -37,7 +38,7 @@ const TestLib = () => {
   async function getYourTest() {
   try {
     const Response = await fetch(
-      `http://localhost:8000/api/getcustomtest/${UserDetails?._id}`,
+      `https://testify-backend-bk4i.onrender.com/api/getcustomtest/${UserDetails?._id}`,
       {
         method: "GET",
         headers: {
@@ -59,7 +60,7 @@ const TestLib = () => {
   }
 
   async function getAllTest() {
-    const data = await fetch("http://localhost:8000/api/library");
+    const data = await fetch("https://testify-backend-bk4i.onrender.com/api/library");
     const response = await data?.json();
    
     
@@ -109,7 +110,7 @@ const TestLib = () => {
     e.preventDefault();
 
     try {
-      const Response = await fetch("http://localhost:8000/api/share", {
+      const Response = await fetch("https://testify-backend-bk4i.onrender.com/api/share", {
         method: "POST",
         credentials: "include",
         headers: {

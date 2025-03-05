@@ -154,12 +154,7 @@ const Navbar = () => {
               Home
             </Link>
 
-            <button
-              className="nav-link text-black hover:tw-bg-green-500 p-2 tw-rounded-md"
-              onClick={() => scrollToSection("about")}
-            >
-              About
-            </button>
+          
             <button
               onClick={() => {
                 isLogin
@@ -273,12 +268,7 @@ const Navbar = () => {
                     Home
                   </Link>
 
-                  <button
-                    className="tw-text-start nav-link text-black hover:tw-bg-green-500 p-2 tw-rounded-md tw-w-full"
-                    onClick={() => scrollToSection("about")}
-                  >
-                    About
-                  </button>
+                
                   <button
                     onClick={() => {
                       isLogin

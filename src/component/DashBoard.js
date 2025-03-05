@@ -26,7 +26,7 @@ const Dashboard = () => {
 
   useEffect(() => {
 
-    const socket = io("http://localhost:8000", {
+    const socket = io("https://testify-backend-bk4i.onrender.com", {
       withCredentials: true,
        
     });
@@ -56,7 +56,7 @@ const Dashboard = () => {
 
   async function getPerformance(){
     try {
-      const Response = await fetch(`http://localhost:8000/api/getanalysis/${selectedTest}`,{
+      const Response = await fetch(`https://testify-backend-bk4i.onrender.com/api/getanalysis/${selectedTest}`,{
         method:"GET",
         credentials :"include",
         headers :{
@@ -194,14 +194,7 @@ const Dashboard = () => {
           </div>
 
           <nav className="tw-mt-8">
-            {/* <div className="tw-px-4 tw-mb-4">
-          <button
-            onClick={() => setIsOrg(!isOrg)}
-            className="tw-w-full tw-py-2 tw-px-4 tw-bg-indigo-600 tw-text-white tw-rounded-lg hover:tw-bg-indigo-700 tw-transition"
-          >
-            {isSidebarOpen ? (isOrg ? 'Switch to User' : 'Switch to Org') : '↺'}
-          </button>
-        </div> */}
+  
             {sideBarContent.map((item, index) => (
               <p
                 key={index}
@@ -393,59 +386,7 @@ const Dashboard = () => {
           
 }
 
-          {/* Recent Assessments and AI Insights */}
-          {/* <div className="tw-grid tw-grid-cols-1 lg:tw-grid-cols-3 tw-gap-8">
-            <div className="lg:tw-col-span-2">
-          <h2 className="tw-text-xl tw-font-bold tw-mb-4">Recent Assessments</h2>
-          <div className="tw-space-y-4">
-            {dashboardData?.map(assessment => (
-              <div 
-                key={assessment.id} 
-                className={`tw-bg-white tw-p-6 tw-rounded-xl tw-shadow-sm tw-cursor-pointer tw-transition tw-border-2 
-                  ${selectedTest?.id === assessment.id ? 'tw-border-indigo-500' : 'tw-border-transparent'}`}
-                onClick={() => setSelectedTest(assessment)}
-              >
-                <h3 className="tw-text-lg tw-font-semibold tw-text-gray-900">
-                  {assessment.title}
-                </h3>
-                <p className="tw-text-sm tw-text-gray-600">
-                  {assessment.date} • {assessment.duration}
-                </p>
-                <p className="tw-font-bold tw-text-indigo-600 tw-mt-2">
-                  Score: {assessment.score}%
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
 
-            <div>
-          {selectedTest && (
-            <div className="tw-bg-white tw-p-6 tw-rounded-xl tw-shadow-sm tw-border tw-border-gray-200">
-              <h2 className="tw-text-xl tw-font-bold tw-mb-4">AI Insights</h2>
-              <ul className="tw-space-y-2">
-                {selectedTest.aiInsights.map((insight, index) => (
-                  <li key={index} className="tw-flex tw-items-start tw-gap-2">
-                    <span className="tw-text-indigo-600">•</span>
-                    <p className="tw-text-gray-700">{insight}</p>
-                  </li>
-                ))}
-              </ul>
-              <div className="tw-mt-6">
-                <h3 className="tw-font-semibold tw-text-gray-900 tw-mb-2">Metrics</h3>
-                <ul className="tw-space-y-1">
-                  {Object.entries(selectedTest.metrics).map(([metric, value], index) => (
-                    <li key={index} className="tw-flex tw-justify-between tw-text-gray-600">
-                      <span>{metric}</span>
-                      <span>{value}%</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          )}
-        </div>
-          </div> */}
         </main>
       </div>
     </>

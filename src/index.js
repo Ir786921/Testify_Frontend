@@ -23,7 +23,7 @@ import CreateTest from "./component/CreateTest";
 import Instruction from "./component/Instruction";
 import Verification from "./component/Verification";
 import TestEnv from "./component/TestEnv";
-import { Provider, useDispatch } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import Store, { persistor } from "./Redux/reduxStore";
 import { PersistGate } from "redux-persist/integration/react";
 
@@ -44,6 +44,8 @@ const TestLib = lazy(() => import("./component/TestLib"));
 
 const Index = () => {
   const path = useLocation().pathname;
+  const {id} = useParams;
+ 
 
   return (
     <Provider store={Store}>

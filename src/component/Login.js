@@ -26,7 +26,7 @@ const Signup = () => {
 
   async function SignUp() {
     try {
-      const Response = await fetch("http://localhost:8000/api/user/Signup", {
+      const Response = await fetch("https://testify-backend-bk4i.onrender.com/api/user/Signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -50,7 +50,7 @@ const Signup = () => {
 
   async function Login() {
     try {
-      const Response = await fetch(`http://localhost:8000/api/user/Login`, {
+      const Response = await fetch(`https://testify-backend-bk4i.onrender.com/api/user/Login`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -134,7 +134,7 @@ const Signup = () => {
   }, [location]);
 
   async function getUserDetails() {
-    const response = await fetch("http://localhost:8000/api/user/details", {
+    const response = await fetch("https://testify-backend-bk4i.onrender.com/api/user/details", {
       method: "GET",
       credentials: "include",
       headers: {

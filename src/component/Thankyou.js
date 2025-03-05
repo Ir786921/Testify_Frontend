@@ -6,6 +6,7 @@ import {Link} from 'react-router-dom'
 const ThankYouAssessment = () => {
 
   const id = useSelector(store => store.library.testID)
+  const userdetails = useSelector(store => store.User.item);
   useEffect(() => {
    
   
@@ -16,7 +17,7 @@ const ThankYouAssessment = () => {
     <div className="tw-min-h-screen tw-flex tw-items-center tw-justify-center tw-bg-gray-50">
       <div className="tw-max-w-md tw-w-full tw-bg-white tw-rounded-lg tw-shadow-lg tw-p-8 tw-text-center tw-space-y-6">
         <div className="tw-flex tw-justify-center">
-          {/* <CheckCircle className="tw-w-16 tw-h-16 tw-text-green-500" /> */}
+         
         </div>
         
         <h1 className="tw-text-3xl tw-font-bold tw-text-gray-900">
@@ -34,8 +35,8 @@ const ThankYouAssessment = () => {
         </div>
         
         <div className="tw-pt-4">
-          <Link to={`/dashboard/${id}`}
-            className="tw-bg-blue-600 tw-text-white tw-px-6 tw-py-3 tw-rounded-md tw-font-medium 
+          <Link to={`/dashboard/${userdetails?._id}`}
+            className="tw-bg-blue-600 tw-text-white tw-px-6 tw-py-3 tw-rounded-md tw-font-medium tw-no-underline
                      tw-transition-colors tw-duration-200 hover:tw-bg-blue-700 
                      focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-ring-offset-2"
            

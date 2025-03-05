@@ -4,17 +4,19 @@ import Image1 from "../assests/Test_Your_Self-removebg-preview.png";
 import Image2 from "../assests/Analysis-removebg-preview.png";
 import Image3 from "../assests/progress2-removebg-preview.png";
 import TestimonialSection from "./TestimonialSection";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import InfiniteScroll from "./InfiniteScroll";
 import Faq from "../utils/Faq";
 import Offerings from "./Offering";
 
 import alltestContext from "../utils/Context";
+import { useSelector } from "react-redux";
 
 const Home = () => {
   const [activeStep, setActiveStep] = useState(1);
   const [hoveredFeature, setHoveredFeature] = useState(null);
-  const { sectionid } = useContext(alltestContext);
+const userdetails = useSelector(store => store.User.IsLogin);
+const navigate = useNavigate();
 
   const features = [
     {
@@ -57,8 +59,27 @@ const Home = () => {
               your technical expertise.
             </p>
             <div className="tw-flex tw-justify-center tw-gap-4">
-              <Link
-                to={"/test"}
+              <button
+              onClick={()=>{
+                userdetails ? navigate("/test") : Swal.fire({
+                                      title: "🔒 Access Restricted!",
+                                      html: `<p class="tw-text-lg tw-font-semibold tw-text-white">You need to logIn to explore the library.</p>`,
+                                      icon: "warning",
+                                      timer: 5000,
+                                      timerProgressBar: true,
+                                      showConfirmButton: false,
+                                      backdrop: `rgba(0,0,0,0.6)`,
+                                      toast: false,
+                                      position: "center",
+                                      customClass: {
+                                        popup:
+                                          "tw-rounded-2xl tw-bg-gradient-to-br tw-from-emerald-500 tw-to-green-700 tw-shadow-xl",
+                                        title: "tw-text-xl tw-font-bold tw-text-white",
+                                        htmlContainer: "tw-text-center",
+                                      },
+                                    });
+              }}
+                
                 className=" tw-no-underline tw-inline-flex tw-items-center tw-px-8 tw-py-3 tw-rounded-full tw-text-base tw-font-medium tw-text-white tw-bg-teal-500 hover:tw-bg-teal-400 tw-transition-all tw-shadow-lg hover:tw-shadow-xl tw-border-0"
               >
                 Start Assessment
@@ -75,7 +96,7 @@ const Home = () => {
                     d="M13 7l5 5m0 0l-5 5m5-5H6"
                   />
                 </svg>
-              </Link>
+              </button>
             </div>
           </div>
         </div>
@@ -83,7 +104,7 @@ const Home = () => {
 
       {/* Stats Section */}
 
-      <div id={sectionid}>
+      <div>
         <Offerings />
       </div>
 
@@ -273,12 +294,31 @@ const Home = () => {
         </h4>
         <div className=" tw-flex tw-justify-center">
           {" "}
-          <Link
-            to="/test"
+          <button
+           onClick={()=>{
+            userdetails ? navigate("/test") : Swal.fire({
+                                  title: "🔒 Access Restricted!",
+                                  html: `<p class="tw-text-lg tw-font-semibold tw-text-white">You need to logIn to explore the library.</p>`,
+                                  icon: "warning",
+                                  timer: 5000,
+                                  timerProgressBar: true,
+                                  showConfirmButton: false,
+                                  backdrop: `rgba(0,0,0,0.6)`,
+                                  toast: false,
+                                  position: "center",
+                                  customClass: {
+                                    popup:
+                                      "tw-rounded-2xl tw-bg-gradient-to-br tw-from-emerald-500 tw-to-green-700 tw-shadow-xl",
+                                    title: "tw-text-xl tw-font-bold tw-text-white",
+                                    htmlContainer: "tw-text-center",
+                                  },
+                                });
+          }}
+            
             className="tw-bg-green-600 tw-text-white tw-font-semibold tw-px-8 tw-py-3 tw-rounded-md tw-shadow-md hover:tw-bg-green-700 tw-no-underline tw-mt-5"
           >
             Get Started
-          </Link>
+          </button>
         </div>
       </div>
 

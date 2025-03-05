@@ -10,7 +10,6 @@ const Instruction = () => {
   const { id } = useParams();
   const Alltest = useSelector((store) => store.library.item);
   const userDetails = useSelector((store) => store.User.item);
-  const [showModal, setShowModal] = useState(false);
   const [testQuestion, setTestQuestion] = useState([]);
   const [mobile ,setMobile] = useState(false)
 
@@ -83,25 +82,7 @@ const Instruction = () => {
     }
   }
 
-  const  handleFullscreen = ()=>{
-    const elem = document.documentElement;
-    
-    if (elem.requestFullscreen) {
-      elem.requestFullscreen().then(() => navigate(`/verification/${id}`));
-    } else if (elem.mozRequestFullScreen) { // Firefox
-      elem.mozRequestFullScreen();
-      navigate(`/verification/${id}`);
-    } else if (elem.webkitRequestFullscreen) { // Chrome, Safari, Edge
-      elem.webkitRequestFullscreen();
-      navigate(`/verification/${id}`);
-    } else if (elem.msRequestFullscreen) { // IE/Edge
-      elem.msRequestFullscreen();
-      navigate(`/verification/${id}`);
-    } else {
-      navigate(`/verification/${id}`); // Fallback if fullscreen is not supported
-    }
-    
-  }
+
 
 
 
@@ -209,34 +190,7 @@ const Instruction = () => {
      
 
 
-{showModal && (
-        <div className="tw-fixed tw-inset-0 tw-bg-black tw-bg-opacity-50 tw-flex tw-items-center tw-justify-center">
-          <div className="tw-bg-white tw-p-6 tw-rounded-lg tw-max-w-sm tw-mx-4">
-            <h3 className="tw-text-lg tw-font-semibold tw-mb-4">
-            📺 Enter Fullscreen Mode?
-            </h3>
-            <p className="tw-text-gray-600 tw-mb-6">
-            "For the best experience, we recommend using fullscreen mode without it we cannot processed further"
-            </p>
 
-            <p className="tw-text-gray-900 tw-mb-6 tw-font-semibold">Would you like to enable fullscreen?"</p>
-            <div className="tw-flex tw-justify-end tw-space-x-4">
-              <button
-                onClick={() => setShowModal(false)}
-                className="tw-px-4 tw-py-2 tw-text-gray-600 hover:tw-text-gray-800 tw-rounded-md"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleFullscreen}
-                className="tw-px-4 tw-py-2 tw-bg-[#368e56] tw-text-white tw-rounded-md hover:tw-bg-[#24683f]"
-              >
-                 Go Fullscreen
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
