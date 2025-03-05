@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import InfiniteScroll from "./InfiniteScroll";
 import Faq from "../utils/Faq";
 import Offerings from "./Offering";
+import Swal from "sweetalert2"
 
 import alltestContext from "../utils/Context";
 import { useSelector } from "react-redux";

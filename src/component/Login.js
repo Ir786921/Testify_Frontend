@@ -312,11 +312,11 @@ const Signup = () => {
             </button>
           </form>
           {isclick ? (
-            <span className="tw-text-red-500 tw-flex tw-flex-row tw-text-md tw-p-1 tw-items-center tw-mt-2 ">
+            <span className="tw-text-red-500 tw-flex tw-flex-row tw-text-md tw-p-1 tw-items-center tw-mt-2 tw-mb-2 ">
               &nbsp; {loginMsg}
             </span>
           ) : (
-            <span className="tw-text-red-500 tw-flex tw-flex-row tw-text-md tw-p-1 tw-items-center tw-mt-2 ">
+            <span className="tw-text-red-500 tw-flex tw-flex-row tw-text-md tw-p-1 tw-items-center tw-mt-2 tw-mb-2 ">
               &nbsp; {registerMsg?.message}
             </span>
           )}
