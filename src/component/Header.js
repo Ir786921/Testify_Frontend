@@ -47,13 +47,7 @@ const Navbar = () => {
 
   const dispatch = useDispatch();
 
-  const user = {
-    name: "John Doe",
-    email: "john.doe@example.com",
-    role: "Student",
-    testsCompleted: 15,
-    averageScore: 85,
-  };
+
 
   const GotoSignUp = () => {
     navigate("/SignUp");
@@ -303,20 +297,24 @@ const Navbar = () => {
                     Contact
                   </Link>
                 </div>
+                {isLogin ? (
+              <p
+              onClick={signOut}
+              className=" tw-cursor-pointer tw-flex tw-items-center tw-space-x-3 tw-px-3 tw-py-2 tw-text-sm tw-text-red-600 hover:tw-bg-red-50 tw-rounded-md"
+            >
+              <i className="fas fa-sign-out-alt tw-text-red-500"></i>
+              <span>Sign Out</span>
+            </p>
+            ) : (  <button
+              className="border-1 tw-px-3 tw-py-2 tw-bg-green-600 tw-text-white tw-rounded-md hover:tw-bg-blue-700 tw-shadow-sm hover:tw-shadow tw-transition-all"
+              onClick={GotoSignUp}
+            >
+              Sign Up
+            </button>)}
               </div>
             </div>
 
-            {isLogin && (
-              <div className="tw-pt-2 tw-pb-2 tw-space-y-2">
-                <a
-                  href="#"
-                  className="tw-flex tw-items-center tw-space-x-3 tw-px-3 tw-py-2 tw-text-sm tw-text-red-600 hover:tw-bg-red-50 tw-rounded-md"
-                >
-                  <i className="fas fa-sign-out-alt tw-text-red-500"></i>
-                  <span>Sign Out</span>
-                </a>
-              </div>
-            )}
+           
           </div>
         </div>
       )}
