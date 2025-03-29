@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "1.0.0",
   "description": "",
-  "proxy": " http://localhost:8000",
+  "proxy": " https://testify-backend-bk4i.onrender.com",
   "source": "src/index.html",
   "type": "module",
   "scripts": {

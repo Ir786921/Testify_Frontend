@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import faq from "../assests/file.png";
+import  {toast,ToastContainer} from "react-toastify"
 
 const Section = ({ question, answer, isvisible, setIsvisible }) => {
   return (
@@ -38,13 +39,23 @@ const Faq = () => {
     Q3: false,
     Q4: false,
     Q5: false,
-    Q6:false
+    Q6: false,
   });
+  const [message, setMessage] = useState(" ");
+  function handleSend(){
+    setMessage(" ");
+    toast.success("Query Sent successfully",{
+      position:"top-right",
+      autoClose:3000,
+      theme:"light",
+      
+    })
+  }
   return (
     <div className="tw-p-6 tw-bg-gradient-to-br tw-from-teal-50 tw-via-[#c9e9ed] tw-to-white ">
-<h1 className="tw-text-center tw-text-2xl md:tw-text-4xl tw-font-extrabold tw-text-gray-900 tw-my-6 tw-tracking-wide">
-    Frequently Asked Questions
-</h1>
+      <h1 className="tw-text-center tw-text-2xl md:tw-text-4xl tw-font-extrabold tw-text-gray-900 tw-my-6 tw-tracking-wide">
+        Frequently Asked Questions
+      </h1>
 
       <br />
       <div className=" tw-flex md:tw-flex-row tw-flex-col tw-p-3  tw-gap-10">
@@ -63,7 +74,7 @@ const Faq = () => {
                 Q3: false,
                 Q4: false,
                 Q5: false,
-                Q6:false
+                Q6: false,
               });
             }}
           />
@@ -80,7 +91,7 @@ const Faq = () => {
                 Q3: false,
                 Q4: false,
                 Q5: false,
-                Q6:false
+                Q6: false,
               });
             }}
           />
@@ -97,7 +108,7 @@ const Faq = () => {
                 Q3: !sectionconfig.Q3,
                 Q4: false,
                 Q5: false,
-                Q6:false
+                Q6: false,
               });
             }}
           />
@@ -114,7 +125,7 @@ const Faq = () => {
                 Q3: false,
                 Q4: !sectionconfig.Q4,
                 Q5: false,
-                Q6:false
+                Q6: false,
               });
             }}
           />
@@ -131,12 +142,11 @@ const Faq = () => {
                 Q3: false,
                 Q4: false,
                 Q5: !sectionconfig.Q5,
-                Q6:false
-
+                Q6: false,
               });
             }}
           />
-           <Section
+          <Section
             question={" Can I use pre-built tests instead of creating my own?"}
             answer={
               "Yes! Tesify offers a library of 100+ pre-built tests across various domains that you can use instantly."
@@ -149,7 +159,7 @@ const Faq = () => {
                 Q3: false,
                 Q4: false,
                 Q5: false,
-                Q6:!sectionconfig.Q6
+                Q6: !sectionconfig.Q6,
               });
             }}
           />
@@ -158,21 +168,41 @@ const Faq = () => {
           <div className=" tw-flex tw-flex-col tw-justify-center tw-items-center">
             <img
               src={faq}
-              alt=""
+              alt="Confuse Picture"
               width={250}
               className=" tw-ml-24"
             />
             <h3 className=" tw-font-bold">Any Question ?</h3>
-            <p className=" tw-text-slate-3">You can ask you want to know about</p>
+            <p className=" tw-text-slate-3">
+              You can ask you want to know about
+            </p>
             <div className=" tw-flex tw-flex-col tw-p-2 tw-w-full">
-            <label htmlFor="Question" className=" tw-ml-10  md:tw-ml-16 tw-mb-2">Let Me Know</label>
-            
-            <input type="text" className=" tw-w-[80%] tw-m-auto tw-rounded-md tw-p-2  tw-border tw-border-solid tw-mt-1 tw-border-black tw-opacity-60" placeholder="Enter here..." />
+              <label
+                htmlFor="Question"
+                className=" tw-ml-[49px]  md:tw-ml-16 tw-mb-2"
+              >
+                Let Me Know
+              </label>
+
+              <textarea
+                type="text"
+                className=" tw-w-[80%] tw-m-auto tw-rounded-md tw-p-2  tw-border tw-border-solid tw-mt-1 tw-border-black tw-opacity-60"
+                placeholder="Enter here..."
+                value={message}
+                onChange={(e) => {
+                  setMessage(e.target.value);
+                }}
+              />
             </div>
-            <button className=" tw-mt-5 tw-rounded-xl tw-shadow-xl tw-shadow-[#02BAD2] tw-px-10 tw-py-1 tw-bg-[#02BAD2] tw-text-white tw-border-none">Sent</button>
+            <button
+             onClick={handleSend}
+             className=" tw-mt-5 tw-rounded-xl tw-shadow-xl tw-shadow-[#02BAD2] tw-px-10 tw-py-1 tw-bg-[#02BAD2] tw-text-white tw-border-none">
+              Sent
+            </button>
+            <ToastContainer/>
           </div>
         </div>
-      </div> 
+      </div>
     </div>
   );
 };

@@ -108,7 +108,7 @@ const Signup = () => {
     const response = await Login();
     
 
-    if (response.status === 200) {
+    if (response?.status === 200) {
       getUserDetails();
       if (testId) {
         navigate(`/details/${testId}`);

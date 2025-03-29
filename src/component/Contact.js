@@ -1,15 +1,31 @@
 import React, { useState } from 'react';
+import { toast, ToastContainer,Bounce } from 'react-toastify';
 
 const Contact = () => {
   const[name,setName] = useState("");
   const[email,setEmail] = useState("");
   const[lname,setLname] = useState("");
   const[message,setMessage] = useState(" ");
+  const handleSubmit = (e)=>{
+     e.preventDefault();
+     setEmail(" ");
+     setLname(" ");
+     setName(" ");
+     setMessage(" ")
+     toast.success("Message Sent Successfully",{
+      position : "top-right",
+      transition:Bounce,
+      autoClose:3000,
+      theme : "colored",
+      closeOnClick: true,
+     })
+  }
 
   return (
     <div className="tw-min-h-screen tw-bg-gradient-to-br tw-from-gray-50 tw-to-gray-100">
       {/* Hero Section */}
-      <div className="tw-bg-blue-600 tw-text-white tw-py-20 tw-px-4">
+      
+            <div className="tw-bg-blue-600 tw-text-white tw-py-20 tw-px-4">
         <div className="tw-max-w-7xl tw-mx-auto tw-text-center">
           <h1 className="tw-text-5xl tw-font-bold tw-mb-6">Let's Start a Conversation</h1>
           <p className="tw-text-xl tw-text-blue-100 tw-max-w-2xl tw-mx-auto">
@@ -117,7 +133,7 @@ const Contact = () => {
           {/* Contact Form */}
           <div className="tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-8">
             <h2 className="tw-text-3xl tw-font-bold tw-mb-6">Send Message</h2>
-            <form className="tw-space-y-6">
+            <form className="tw-space-y-6" onSubmit={(e)=>handleSubmit(e)}>
               <div className="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6">
                 <div>
                   <label className="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">First Name</label>
@@ -151,17 +167,19 @@ const Contact = () => {
                 <label className="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Message</label>
                 <textarea
                   rows="5"
+                  value={message}
+                  onChange={(e)=>{setMessage(e.target.value)}}
                   className="tw-w-full tw-px-4 tw-py-3 tw-rounded-lg tw-border tw-border-gray-300 focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-border-transparent"
                 ></textarea>
               </div>
               <button
                 type="submit"
                 className="tw-bg-blue-600 tw-text-white tw-px-6 tw-py-3 tw-rounded-lg tw-font-semibold hover:tw-bg-blue-700 focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-ring-offset-2"
-                value={message}
-                onChange={(e)=>{setMessage(e.target.value)}}
+                 
               >
                 Send Message
               </button>
+              <ToastContainer/>
             </form>
           </div>
         </div>

@@ -121,7 +121,7 @@ const Navbar = () => {
 
   return (
     <nav className="tw-bg-white tw-backdrop-blur-md tw-bg-opacity-80 tw-sticky tw-top-0 tw-z-50 tw-border-b tw-border-gray-100 tw-shadow-md tw-p-1">
-      <div className="tw-max-w-7xl tw-mx-auto tw-px-4 sm:tw-px-6 lg:tw-px-8">
+      <div className="tw-max-w-full tw-mx-auto tw-px-4 sm:tw-px-6 lg:tw-px-8 tw-relative">
         <div className="tw-flex tw-justify-between tw-items-center tw-h-16">
           {/* Logo and Brand */}
           <div className="tw-flex tw-items-center">
@@ -186,7 +186,7 @@ const Navbar = () => {
           {/* User Section & Auth Buttons */}
           <div className="tw-hidden md:tw-flex tw-items-center tw-space-x-4">
             {userdetails?.Email && (
-              <div className="tw-relative tw-left-28 tw-bg-white dropdown-container">
+              <div className="tw-absolute tw-left-28 tw-bg-white dropdown-container">
                 <button
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
                   className="tw-flex tw-items-center tw-space-x-3 tw-px-3 tw-py-2 tw-rounded-md hover:tw-bg-white border-1 tw-bg-white"
@@ -208,7 +208,7 @@ const Navbar = () => {
 
             {!userdetails?.Email && (
               <button
-                className="border-1 tw-px-3 tw-py-2 tw-bg-green-600 tw-text-white tw-rounded-md hover:tw-bg-blue-700 tw-shadow-sm hover:tw-shadow tw-transition-all tw-relative tw-left-28"
+                className="border-1 tw-px-3 tw-py-2 tw-bg-green-600 tw-text-white tw-rounded-md hover:tw-bg-blue-700 tw-shadow-sm hover:tw-shadow tw-transition-all tw-absolute tw-right-6"
                 onClick={GotoSignUp}
               >
                 Sign Up
