@@ -29,6 +29,7 @@ const Signup = () => {
       const Response = await fetch("https://testify-backend-bk4i.onrender.com/api/user/Signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({
           FullName: User.trim(),
           Email: email.trim(),
