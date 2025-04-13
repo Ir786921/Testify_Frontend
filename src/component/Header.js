@@ -16,13 +16,13 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Check if the clicked element is NOT inside the dropdown or the button
+    
       if (!event.target.closest(".dropdown-container")) {
         setIsProfileOpen(false);
       }
     };
 
-    // Add event listener when dropdown is open
+  
     if (isProfileOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
@@ -78,7 +78,7 @@ const Navbar = () => {
   const UserProfile = () => (
     <div className="tw-absolute tw-right-0 tw-mt-2 tw-w-80 tw-rounded-lg tw-shadow-lg tw-bg-white tw-ring-1 tw-ring-black tw-ring-opacity-5">
       <div className="tw-p-4">
-        {/* User Header */}
+       
         <div className="tw-flex tw-items-center tw-space-x-3 tw-pb-3 tw-border-b tw-border-gray-100">
           <div className="tw-h-12 tw-w-12 tw-rounded-full tw-bg-gradient-to-r tw-from-blue-500 tw-to-purple-500 tw-flex tw-items-center tw-justify-center">
             <i className="fa-solid fa-user tw-text-black tw-text-lg"></i>
@@ -96,7 +96,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Footer Actions */}
+    
         <div className="tw-pt-2 tw-border-t tw-border-gray-100">
           <Link
             to={`/dashboard/${userdetails?._id}`}
@@ -123,7 +123,7 @@ const Navbar = () => {
     <nav className="tw-bg-white tw-backdrop-blur-md tw-bg-opacity-80 tw-sticky tw-top-0 tw-z-50 tw-border-b tw-border-gray-100 tw-shadow-md tw-p-1">
       <div className="tw-max-w-full tw-mx-auto tw-px-4 sm:tw-px-6 lg:tw-px-8 tw-relative">
         <div className="tw-flex tw-justify-between tw-items-center tw-h-16">
-          {/* Logo and Brand */}
+          
           <div className="tw-flex tw-items-center">
             <div className="tw-flex-shrink-0">
               <div className="tw-flex tw-items-center tw-gap-3">
@@ -139,7 +139,7 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Desktop Navigation */}
+          
           <div className="tw-hidden md:tw-flex tw-items-center tw-space-x-8">
             <Link
               to="/"
@@ -183,10 +183,10 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* User Section & Auth Buttons */}
+         
           <div className="tw-hidden md:tw-flex tw-items-center tw-space-x-4">
             {userdetails?.Email && (
-              <div className="tw-absolute tw-left-28 tw-bg-white dropdown-container">
+              <div className="tw-absolute  tw-bg-white dropdown-container">
                 <button
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
                   className="tw-flex tw-items-center tw-space-x-3 tw-px-3 tw-py-2 tw-rounded-md hover:tw-bg-white border-1 tw-bg-white"
@@ -204,7 +204,7 @@ const Navbar = () => {
               </div>
             )}
 
-            {/* Non-authenticated View */}
+      
 
             {!userdetails?.Email && (
               <button
@@ -216,7 +216,7 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile menu button */}
+  
           <div className="md:tw-hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -232,7 +232,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
+ 
       {isOpen && (
         <div className="md:tw-hidden tw-absolute tw-w-full tw-bg-white tw-border-b tw-border-gray-100 tw-shadow-lg">
           <div className="tw-px-4 tw-pt-2 tw-pb-3 tw-space-y-1">
