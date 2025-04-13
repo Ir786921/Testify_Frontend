@@ -13,6 +13,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [User, setUser] = useState("");
   const [ischecked, setIschecked] = useState(false);
+  const[loginClicked,setLoginClicked] = useState(false);
   const [org, setOrg] = useState("");
   const [mobile, setMobile] = useState("");
   const navigate = useNavigate();
@@ -69,9 +70,9 @@ const Signup = () => {
         }
       );
 
-      console.log(Response.status);
 
-      setLoginStatus(Response.status);
+
+      setLoginClicked(true)
 
       const result = await Response.json();
       if (result.user) {
@@ -165,7 +166,7 @@ const Signup = () => {
 
   return (
     <>
-{isclick && (!userDetails || userDetails.length === 0) && <Loader />}
+{loginClicked && (!userDetails || userDetails.length === 0) && <Loader />}
 
       <div className="tw-flex md:tw-flex-row tw-flex-col-reverse tw-bg-gray-100 md:tw-h-screen ">
         <div className="md:tw-w-1/2 tw-w-full tw-bg-black tw-text-white tw-flex tw-justify-center tw-items-center">
