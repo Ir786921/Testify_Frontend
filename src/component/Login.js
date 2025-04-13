@@ -51,6 +51,9 @@ const Signup = () => {
     } catch (error) {}
   }
 
+  const userDetails = useSelector(store => store.User.item);
+  const IsAuthenticated = useSelector(store => store.User.IsLogin);
+
   async function Login() {
     try {
       const Response = await fetch(
@@ -162,7 +165,7 @@ const Signup = () => {
 
   return (
     <>
-      { loginMsg !== ""  &&  <Loader/> ||  registerMsg  !== ""   && <Loader/>}
+    { (IsAuthenticated && (!userDetails || userDetails.length === 0))  && <Loader/> || (!userDetails || userDetails.length === 0)  && <Loader/>}
 
       <div className="tw-flex md:tw-flex-row tw-flex-col-reverse tw-bg-gray-100 md:tw-h-screen ">
         <div className="md:tw-w-1/2 tw-w-full tw-bg-black tw-text-white tw-flex tw-justify-center tw-items-center">

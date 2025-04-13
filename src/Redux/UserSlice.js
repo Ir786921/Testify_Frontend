@@ -12,7 +12,7 @@ const UserSlice = createSlice(
                  state.IsLogin = true
             },
             addUser: (state, action) => {
-                state.item = action.payload; // Store the entire array
+                state.item = action.payload; 
             },
             removeUser: (state) => {
                 state.item = [];
