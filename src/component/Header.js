@@ -186,7 +186,7 @@ const Navbar = () => {
          
           <div className="tw-hidden md:tw-flex tw-items-center tw-space-x-4">
             {userdetails?.Email && (
-              <div className="tw-absolute  tw-bg-white dropdown-container">
+              <div className="tw-absolute tw-right-28  tw-bg-white dropdown-container">
                 <button
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
                   className="tw-flex tw-items-center tw-space-x-3 tw-px-3 tw-py-2 tw-rounded-md hover:tw-bg-white border-1 tw-bg-white"
