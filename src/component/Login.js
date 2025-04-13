@@ -162,7 +162,7 @@ const Signup = () => {
 
   return (
     <>
-      { loginMsg   &&  <Loader/> ||  registerMsg   && <Loader/>}
+      { loginMsg !== ""  &&  <Loader/> ||  registerMsg  !== ""   && <Loader/>}
 
       <div className="tw-flex md:tw-flex-row tw-flex-col-reverse tw-bg-gray-100 md:tw-h-screen ">
         <div className="md:tw-w-1/2 tw-w-full tw-bg-black tw-text-white tw-flex tw-justify-center tw-items-center">
