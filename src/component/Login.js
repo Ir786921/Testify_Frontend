@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addUser, IsAuthenticate } from "../Redux/UserSlice";
 import photo from "../assests/pngtree-cute-flat-tech-work-contact-illustration-character-image_1363979-removebg-preview.png";
 import { useLocation } from "react-router-dom";
+import Loader from "./Loader";
 
 const Signup = () => {
   const [isclick, setIsclick] = useState(false);
