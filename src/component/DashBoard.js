@@ -11,11 +11,11 @@ import PerformanceAnalysis from "./PerformanceAnalysis";
 const Dashboard = () => {
   const dispatch = useDispatch();
   const UserDetails = useSelector((Store) => Store.User.item);
-  console.log(UserDetails);
-  const [isOrg, setIsOrg] = useState(UserDetails?.isOrganisation);
+
+  const [isOrg, setIsOrg] = useState(UserDetails[0]?.isOrganisation);
   const [isSidebarOpen, setSidebarOpen] = useState(true);
-  const [selectedTest, setSelectedTest] = useState(isOrg ? UserDetails?.testsCreated : UserDetails?.recentAssessments[0]?._id  );
-  const [dashboardData, setDashboardData] = useState(isOrg ? UserDetails?.testsCreated : UserDetails?.recentAssessments);
+  const [selectedTest, setSelectedTest] = useState(isOrg ? UserDetails[0]?.testsCreated : UserDetails[0]?.recentAssessments[0]?._id  );
+  const [dashboardData, setDashboardData] = useState(isOrg ? UserDetails[0]?.testsCreated : UserDetails[0]?.recentAssessments);
   const [error, setError] = useState(null);
   const [dashboard, setDashboard] = useState(true);
   const [std,setStd] = useState(false)
@@ -35,7 +35,7 @@ const Dashboard = () => {
       console.log("Frontend socket connected with ID:", socket.id);
     });
     
-    if (UserDetails?._id) {
+    if (UserDetails[0]?._id) {
       console.log(`Listening to update`);
       socket.on(`update`, (updatedData) => {
         console.log("Recruiter data updated:", updatedData);
@@ -44,7 +44,7 @@ const Dashboard = () => {
     }
   
     return () => {
-      if (UserDetails?._id) {
+      if (UserDetails[0]?._id) {
         console.log(`Removing listener update`);
         socket.off(`update`);
       }
@@ -93,11 +93,11 @@ const Dashboard = () => {
   const metrics = [
     {
       label: isOrg ?  "Total Assessments" : "Test Compleated",
-      value: isOrg ? UserDetails?.testsCreated.length : UserDetails?.testsCompleted
+      value: isOrg ? UserDetails[0]?.testsCreated.length : UserDetails[0]?.testsCompleted
     },
     {
       label: isOrg ? "Invitations" : "Response Time (sec)" ,
-      value:  isOrg ? UserDetails?.sharedTests.length : UserDetails?.responseTime 
+      value:  isOrg ? UserDetails[0]?.sharedTests.length : UserDetails[0]?.responseTime 
     },
 
     {
@@ -106,42 +106,42 @@ const Dashboard = () => {
     },
     {
       label:isOrg ?  "Active Assessments" : "Average Score",
-      value: isOrg ? "24" : parseInt(UserDetails?.averageScore)
+      value: isOrg ? "24" : parseInt(UserDetails[0]?.averageScore)
     }
   ];
 
   const info = [
     {
       label: "Total User",
-      value: UserDetails?.FullName,
+      value: UserDetails[0]?.FullName,
       icon: <span>👥</span>,
     },
     {
       label: "Name",
-      value: UserDetails?.FullName,
+      value: UserDetails[0]?.FullName,
       icon: <span>👤</span>,
     },
     {
       label: "Email",
-      value: UserDetails?.Email,
+      value: UserDetails[0]?.Email,
       icon: <span>📩</span>,
     },
     {
       label: "Mobile",
-      value: UserDetails?.MobileNo,
+      value: UserDetails[0]?.MobileNo,
       icon: <span>📱</span>,
     },
     {
       label: "Satisfaction Rate",
-      value: UserDetails?.MobileNo,
+      value: UserDetails[0]?.MobileNo,
       icon: <span>🌟</span>,
     }
   ]
 
-  if (UserDetails?.OrganisationName) {
+  if (UserDetails[0]?.OrganisationName) {
     info.push({
       label: "Organisation",
-      value: UserDetails?.OrganisationName,
+      value: UserDetails[0]?.OrganisationName,
       icon: <span>🏭</span>,
     })
   }
@@ -160,7 +160,7 @@ const Dashboard = () => {
               { icon: <span>🏆</span>, label: "Results" },
   ]
 
-  if (UserDetails?.OrganisationName) {
+  if (UserDetails[0]?.OrganisationName) {
     sideBarContent.push({ icon:<span>👨🏻‍🎓</span>, label:"Candidates" })
   }
 
@@ -246,7 +246,7 @@ const Dashboard = () => {
             <div>
               <h1 className="tw-text-2xl tw-font-bold tw-text-gray-900">
                 Welcome back,{" "}
-                {isOrg ? UserDetails?.FullName : UserDetails?.FullName}!
+                {isOrg ? UserDetails[0]?.FullName : UserDetails[0]?.FullName}!
               </h1>
               <p className="tw-text-gray-600">
                 {isOrg ? "Organization Dashboard" : "Student Dashboard"}
@@ -263,7 +263,7 @@ const Dashboard = () => {
                   } tw-flex tw-flex-col tw-justify-center`}
                 >
                   <span className="tw-font-medium ">
-                    {isOrg ? "Admin User" : UserDetails?.FullName}
+                    {isOrg ? "Admin User" : UserDetails[0]?.FullName}
                   </span>
                   <span className="tw-text-sm tw-text-gray-600">
                     {isOrg ? "Organization" : "Student"}
@@ -357,7 +357,7 @@ const Dashboard = () => {
   {isOrg ? "Assessment Created" : "Recent Assessment"}
 </h2>
             <div className=" tw-flex tw-flex-col tw-gap-5 ">
-            <TestDetailsCard test = {dashboardData} isOrg = {isOrg} CompleatedOn = {UserDetails?.updatedAt} setAssessment = {setAssessment} setResult = {setResult} setSelectedTest={setSelectedTest} getPerformance={getPerformance} />
+            <TestDetailsCard test = {dashboardData} isOrg = {isOrg} CompleatedOn = {UserDetails[0]?.updatedAt} setAssessment = {setAssessment} setResult = {setResult} setSelectedTest={setSelectedTest} getPerformance={getPerformance} />
             </div>
           
           
@@ -369,7 +369,7 @@ const Dashboard = () => {
 
           {std && (
             <div className=" tw-flex-col tw-gap-5">
-  {UserDetails?.sharedTests.map((item, index) => (
+  {UserDetails[0]?.sharedTests.map((item, index) => (
   <div className=" tw-flex-col tw-gap-5 tw-p-2">
       {item.sharedWith.map((ir) => (
         <>

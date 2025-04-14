@@ -12,7 +12,7 @@ const UserSlice = createSlice(
                  state.IsLogin = true
             },
             addUser: (state, action) => {
-                state.item = action.payload; 
+                state.item.push(action.payload);
             },
             removeUser: (state) => {
                 state.item = [];
@@ -20,7 +20,10 @@ const UserSlice = createSlice(
             },
           updateUser: (state, action) => {
             
-            state.item = action.payload;
+            const index = state.item.findIndex(user => user._id === action.payload._id);
+            if (index !== -1) {
+                state.item[index] = action.payload;
+            }
 }
             
            

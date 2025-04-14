@@ -85,13 +85,13 @@ const Navbar = () => {
           </div>
           <div>
             <h3 className="tw-text-sm tw-font-semibold tw-text-gray-900">
-              {userdetails?.FullName}
+              {userdetails[0]?.FullName}
             </h3>
-            <p className="tw-text-xs tw-text-gray-500">{userdetails?.Email}</p>
+            <p className="tw-text-xs tw-text-gray-500">{userdetails[0]?.Email}</p>
             <span className="tw-inline-block tw-px-2 tw-py-0.5 tw-text-xs tw-bg-blue-100 tw-text-blue-800 tw-rounded-full tw-mt-1">
-              {!userdetails?.isOrganisation
+              {!userdetails[0]?.isOrganisation
                 ? "Student"
-                : userdetails?.OrganisationName}
+                : userdetails[0]?.OrganisationName}
             </span>
           </div>
         </div>
@@ -99,7 +99,7 @@ const Navbar = () => {
     
         <div className="tw-pt-2 tw-border-t tw-border-gray-100">
           <Link
-            to={`/dashboard/${userdetails?._id}`}
+            to={`/dashboard/${userdetails[0]?._id}`}
             className="tw-flex tw-items-center tw-space-x-3 tw-px-3 tw-py-2 tw-text-sm tw-no-underline tw-text-gray-700 hover:tw-bg-gray-100 tw-rounded-md"
           >
             {" "}
@@ -185,8 +185,8 @@ const Navbar = () => {
 
          
           <div className="tw-hidden md:tw-flex tw-items-center tw-space-x-4">
-            {userdetails?.Email && (
-              <div className="tw-absolute tw-right-24  tw-bg-white dropdown-container">
+            {userdetails[0]?.Email && (
+              <div className="tw-absolute tw-right-16  tw-bg-white dropdown-container">
                 <button
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
                   className="tw-flex tw-items-center tw-space-x-3 tw-px-3 tw-py-2 tw-rounded-md hover:tw-bg-white border-1 tw-bg-white"
@@ -195,7 +195,7 @@ const Navbar = () => {
                     <i className="fas fa-user tw-text-white"></i>
                   </div>
                   <span className="tw-text-gray-700">
-                    {userdetails?.FullName}
+                    {userdetails[0]?.FullName}
                   </span>
                   <i className="fas fa-chevron-down tw-text-gray-500 tw-text-xs"></i>
                 </button>
@@ -206,9 +206,9 @@ const Navbar = () => {
 
       
 
-            {!userdetails?.Email && (
+            {!userdetails[0]?.Email && (
               <button
-                className="border-1 tw-px-3 tw-py-2 tw-bg-green-600 tw-text-white tw-rounded-md hover:tw-bg-blue-700 tw-shadow-sm hover:tw-shadow tw-transition-all tw-absolute tw-right-6"
+                className="border-1 tw-px-3 tw-py-2 tw-bg-green-600  tw-text-white tw-rounded-md  tw-shadow-sm hover:tw-shadow tw-transition-all tw-absolute tw-right-6"
                 onClick={GotoSignUp}
               >
                 Sign Up
